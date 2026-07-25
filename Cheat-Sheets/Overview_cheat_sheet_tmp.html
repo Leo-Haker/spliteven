@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Overview_cheat_sheet.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> or <div class="page"></div> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="fullstack-cheat-sheet--koppla-ihop-frontend-backend--databas">Fullstack Cheat Sheet – koppla ihop Frontend, Backend &amp; Databas</h1>
+<h2 id="hela-kedjan-översikt">Hela kedjan, översikt</h2>
+<pre class="hljs"><code><div>React (localhost:5173)
+   │  fetch('http://localhost:8080/api/expenses')
+   ▼
+Spring Boot / Tomcat (localhost:8080)
+   │
+   ▼
+Controller  (@RestController)   -- tar emot HTTP-anropet
+   │
+   ▼
+Service     (valfritt lager)    -- affärslogik
+   │
+   ▼
+Repository  (JpaRepository)     -- pratar med databasen
+   │
+   ▼
+PostgreSQL  (localhost:5432)
+</div></code></pre>
+<p>Frontend och backend är <strong>två helt separata program</strong> som pratar med varandra över HTTP – de körs på olika portar och vet inget om varandras kod, bara om det avtalade API:et (URL:er + JSON-format).</p>
+<hr>
+<h2 id="controller--tar-emot-requests">Controller – tar emot requests</h2>
+<pre class="hljs"><code><div><span class="hljs-meta">@RestController</span>
+<span class="hljs-meta">@RequestMapping(&quot;/api/expenses&quot;)</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ExpenseController</span> {
+
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> ExpenseRepository expenseRepository;
+
+    <span class="hljs-keyword">public</span> <span class="hljs-title function_">ExpenseController</span><span class="hljs-params">(ExpenseRepository expenseRepository)</span> {
+        <span class="hljs-built_in">this</span>.expenseRepository = expenseRepository;
+    }
+
+    <span class="hljs-meta">@GetMapping</span>
+    <span class="hljs-keyword">public</span> List&lt;Expense&gt; <span class="hljs-title function_">getAll</span><span class="hljs-params">()</span> {
+        <span class="hljs-keyword">return</span> expenseRepository.findAll();
+    }
+
+    <span class="hljs-meta">@GetMapping(&quot;/{id}&quot;)</span>
+    <span class="hljs-keyword">public</span> ResponseEntity&lt;Expense&gt; <span class="hljs-title function_">getOne</span><span class="hljs-params">(<span class="hljs-meta">@PathVariable</span> Long id)</span> {
+        <span class="hljs-keyword">return</span> expenseRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    <span class="hljs-meta">@PostMapping</span>
+    <span class="hljs-keyword">public</span> Expense <span class="hljs-title function_">create</span><span class="hljs-params">(<span class="hljs-meta">@Valid</span> <span class="hljs-meta">@RequestBody</span> Expense expense)</span> {
+        <span class="hljs-keyword">return</span> expenseRepository.save(expense);
+    }
+
+    <span class="hljs-meta">@DeleteMapping(&quot;/{id}&quot;)</span>
+    <span class="hljs-keyword">public</span> ResponseEntity&lt;Void&gt; <span class="hljs-title function_">delete</span><span class="hljs-params">(<span class="hljs-meta">@PathVariable</span> Long id)</span> {
+        expenseRepository.deleteById(id);
+        <span class="hljs-keyword">return</span> ResponseEntity.noContent().build();
+    }
+}
+</div></code></pre>
+<table>
+<thead>
+<tr>
+<th>Annotering</th>
+<th>Betyder</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>@RestController</code></td>
+<td>Klassen returnerar JSON direkt (inte HTML-vyer)</td>
+</tr>
+<tr>
+<td><code>@RequestMapping(&quot;/api/expenses&quot;)</code></td>
+<td>Bas-URL för alla metoder i klassen</td>
+</tr>
+<tr>
+<td><code>@GetMapping</code></td>
+<td>Hanterar GET-requests (hämta data)</td>
+</tr>
+<tr>
+<td><code>@PostMapping</code></td>
+<td>Hanterar POST-requests (skapa data)</td>
+</tr>
+<tr>
+<td><code>@PutMapping</code></td>
+<td>Hanterar PUT-requests (uppdatera data)</td>
+</tr>
+<tr>
+<td><code>@DeleteMapping</code></td>
+<td>Hanterar DELETE-requests (ta bort data)</td>
+</tr>
+<tr>
+<td><code>@PathVariable</code></td>
+<td>Hämtar en variabel från URL:en, t.ex. <code>/expenses/5</code> → <code>id=5</code></td>
+</tr>
+<tr>
+<td><code>@RequestParam</code></td>
+<td>Hämtar en query-parameter, t.ex. <code>?month=2026-07</code></td>
+</tr>
+<tr>
+<td><code>@RequestBody</code></td>
+<td>Tolkar JSON i request-kroppen som ett Java-objekt</td>
+</tr>
+<tr>
+<td><code>ResponseEntity&lt;T&gt;</code></td>
+<td>Ger full kontroll över statuskod + body i svaret</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="http-metoder--statuskoder">HTTP-metoder &amp; statuskoder</h2>
+<table>
+<thead>
+<tr>
+<th>Metod</th>
+<th>Används för</th>
+<th>Vanlig statuskod vid lyckat svar</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET</code></td>
+<td>Hämta data</td>
+<td><code>200 OK</code></td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td>Skapa ny data</td>
+<td><code>201 Created</code> (eller <code>200 OK</code>)</td>
+</tr>
+<tr>
+<td><code>PUT</code></td>
+<td>Ersätta befintlig data</td>
+<td><code>200 OK</code></td>
+</tr>
+<tr>
+<td><code>PATCH</code></td>
+<td>Delvis uppdatera data</td>
+<td><code>200 OK</code></td>
+</tr>
+<tr>
+<td><code>DELETE</code></td>
+<td>Ta bort data</td>
+<td><code>204 No Content</code></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Statuskod</th>
+<th>Betyder</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>200</code></td>
+<td>OK</td>
+</tr>
+<tr>
+<td><code>201</code></td>
+<td>Skapad</td>
+</tr>
+<tr>
+<td><code>204</code></td>
+<td>OK, inget innehåll att returnera</td>
+</tr>
+<tr>
+<td><code>400</code></td>
+<td>Felaktig request (t.ex. validering misslyckades)</td>
+</tr>
+<tr>
+<td><code>404</code></td>
+<td>Hittades inte</td>
+</tr>
+<tr>
+<td><code>500</code></td>
+<td>Serverfel</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="cors--varför-frontend-inte-kan-nå-backend-direkt">CORS – varför frontend inte kan nå backend direkt</h2>
+<p>Webbläsare blockerar som standard requests mellan olika <strong>origins</strong> (kombination av protokoll + domän + port). <code>localhost:5173</code> (React) och <code>localhost:8080</code> (Spring Boot) räknas som <strong>olika origins</strong>, trots att båda kör lokalt – du får ett CORS-fel i webbläsarens konsol om du inte tillåter det explicit.</p>
+<p><strong>Lösning 1: Per controller</strong></p>
+<pre class="hljs"><code><div><span class="hljs-meta">@RestController</span>
+<span class="hljs-meta">@CrossOrigin(origins = &quot;http://localhost:5173&quot;)</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ExpenseController</span> { ... }
+</div></code></pre>
+<p><strong>Lösning 2: Global konfiguration (bättre för hela projektet)</strong></p>
+<pre class="hljs"><code><div><span class="hljs-meta">@Configuration</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">WebConfig</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">WebMvcConfigurer</span> {
+    <span class="hljs-meta">@Override</span>
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">addCorsMappings</span><span class="hljs-params">(CorsRegistry registry)</span> {
+        registry.addMapping(<span class="hljs-string">&quot;/api/**&quot;</span>)
+                .allowedOrigins(<span class="hljs-string">&quot;http://localhost:5173&quot;</span>)
+                .allowedMethods(<span class="hljs-string">&quot;GET&quot;</span>, <span class="hljs-string">&quot;POST&quot;</span>, <span class="hljs-string">&quot;PUT&quot;</span>, <span class="hljs-string">&quot;DELETE&quot;</span>);
+    }
+}
+</div></code></pre>
+<hr>
+<h2 id="anropa-backend-från-react">Anropa backend från React</h2>
+<pre class="hljs"><code><div><span class="hljs-keyword">const</span> <span class="hljs-variable constant_">API_BASE</span> = <span class="hljs-string">&quot;http://localhost:8080/api&quot;</span>;
+
+<span class="hljs-comment">// GET</span>
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">loadExpenses</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> res = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(<span class="hljs-string">`<span class="hljs-subst">${API_BASE}</span>/expenses`</span>);
+  <span class="hljs-keyword">if</span> (!res.<span class="hljs-property">ok</span>) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&quot;Kunde inte hämta utgifter&quot;</span>);
+  <span class="hljs-keyword">return</span> res.<span class="hljs-title function_">json</span>();
+}
+
+<span class="hljs-comment">// POST</span>
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">createExpense</span>(<span class="hljs-params">expense</span>) {
+  <span class="hljs-keyword">const</span> res = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(<span class="hljs-string">`<span class="hljs-subst">${API_BASE}</span>/expenses`</span>, {
+    <span class="hljs-attr">method</span>: <span class="hljs-string">&quot;POST&quot;</span>,
+    <span class="hljs-attr">headers</span>: { <span class="hljs-string">&quot;Content-Type&quot;</span>: <span class="hljs-string">&quot;application/json&quot;</span> },
+    <span class="hljs-attr">body</span>: <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(expense),
+  });
+  <span class="hljs-keyword">if</span> (!res.<span class="hljs-property">ok</span>) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&quot;Kunde inte spara utgift&quot;</span>);
+  <span class="hljs-keyword">return</span> res.<span class="hljs-title function_">json</span>();
+}
+</div></code></pre>
+<p><strong>Bra vana: lägg bas-URL i en <code>.env</code>-fil istället för hårdkodad</strong></p>
+<pre class="hljs"><code><div># frontend/.env
+VITE_API_URL=http://localhost:8080/api
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-keyword">const</span> <span class="hljs-variable constant_">API_BASE</span> = <span class="hljs-keyword">import</span>.<span class="hljs-property">meta</span>.<span class="hljs-property">env</span>.<span class="hljs-property">VITE_API_URL</span>;
+</div></code></pre>
+<hr>
+<h2 id="entity-vs-dto--vad-skickas-egentligen-som-json">Entity vs DTO – vad skickas egentligen som JSON?</h2>
+<p>Att returnera en <code>@Entity</code> direkt från en controller funkar, men har fallgropar:</p>
+<table>
+<thead>
+<tr>
+<th>Problem</th>
+<th>Varför</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Lazy-loading-fel</td>
+<td>Om en relation är <code>LAZY</code> och Hibernate-sessionen stängts innan JSON skrivs, kastas ett fel</td>
+</tr>
+<tr>
+<td>Oönskad data läcker ut</td>
+<td>T.ex. lösenordsfält, interna ID:n, hela relationsträd</td>
+</tr>
+<tr>
+<td>Oändlig loop</td>
+<td>Om <code>Account</code> har <code>List&lt;Person&gt;</code> och <code>Person</code> har <code>List&lt;Account&gt;</code> kan JSON-serialiseringen gå i cirklar</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Lösning: använd ett separat DTO (Data Transfer Object)</strong></p>
+<pre class="hljs"><code><div><span class="hljs-keyword">public</span> <span class="hljs-keyword">record</span> <span class="hljs-title class_">ExpenseDto</span><span class="hljs-params">(Long id, String description, BigDecimal amount, String paidByName)</span> {
+}
+
+<span class="hljs-meta">@GetMapping</span>
+<span class="hljs-keyword">public</span> List&lt;ExpenseDto&gt; <span class="hljs-title function_">getAll</span><span class="hljs-params">()</span> {
+    <span class="hljs-keyword">return</span> expenseRepository.findAll().stream()
+            .map(e -&gt; <span class="hljs-keyword">new</span> <span class="hljs-title class_">ExpenseDto</span>(e.getId(), e.getDescription(), e.getAmount(), e.getPaidBy().getName()))
+            .toList();
+}
+</div></code></pre>
+<p>DTO:n bestämmer exakt vad som skickas till frontend – inget mer, inget mindre.</p>
+<hr>
+<h2 id="felsökningsflöde-när-det-inte-funkar">Felsökningsflöde när &quot;det inte funkar&quot;</h2>
+<ol>
+<li><strong>Fungerar backend-anropet isolerat?</strong> Testa i terminalen:<pre class="hljs"><code><div>curl http://localhost:8080/api/expenses
+</div></code></pre>
+</li>
+<li><strong>CORS-fel i webbläsarens konsol (F12)?</strong> → kolla CORS-konfigurationen ovan</li>
+<li><strong>404 Not Found?</strong> → kolla att URL:en i <code>fetch()</code> matchar <code>@RequestMapping</code> + <code>@GetMapping</code> exakt</li>
+<li><strong>500 Internal Server Error?</strong> → kolla backend-terminalen för stacktrace, ofta ett databas- eller null-relaterat fel</li>
+<li><strong>JSON ser konstigt ut / saknar fält?</strong> → kolla om du returnerar en <code>@Entity</code> direkt (se DTO-avsnittet ovan)</li>
+</ol>
+
+</body>
+</html>
