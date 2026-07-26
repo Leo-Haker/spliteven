@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { styles } from "../utils/styles.js"
 import CreateAccountForm from "./CreateAccountForm"
 
 
@@ -12,14 +13,14 @@ function SelectAccountStep({ onAccountSelected }) {
     }
 
   return (
-    <div className="bg-white rounded-2xl shadow-md p-8 w-full max-w-sm">
-      <h1 className="text-2xl font-semibold text-slate-800 mb-1">Välj konto</h1>
-      <p className="text-slate-500 text-sm mb-6">Skapa ett nytt eller gå med i ett befintligt</p>
+    <div className={styles.card}>
+      <h1 className={styles.cardTitle}>Välj konto</h1>
+      <p className={styles.cardSubtitle}>Skapa ett nytt eller gå med i ett befintligt</p>
 
       <nav className="flex flex-col gap-3">
         <button
-          onClick={() => onAccountSelected({ id: null, name: "Nytt konto" })}
-          className="w-full rounded-lg bg-slate-900 text-white py-2.5 font-medium hover:bg-slate-700 transition-colors"
+          onClick={() => setShowCreateForm(!showCreateForm)}
+          className={styles.buttonPrimary}
         >
           Skapa konto
         </button>
@@ -31,7 +32,7 @@ function SelectAccountStep({ onAccountSelected }) {
             />
         )}
 
-        <button className="w-full rounded-lg bg-slate-100 text-slate-800 py-2.5 font-medium hover:bg-slate-200 transition-colors">
+        <button className={styles.buttonSecondary}>
           Gå med i befintligt
         </button>
       </nav>

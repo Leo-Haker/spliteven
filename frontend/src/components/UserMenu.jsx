@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useSession } from "../context/SessionContext.jsx"
+import { ROUTES } from "../utils/routes.js"
 
 function UserMenu() {
   const [open, setOpen] = useState(false)
@@ -21,19 +22,19 @@ function UserMenu() {
       {open && (
         <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-md border border-slate-100 py-1 z-10">
           <button
-            onClick={() => { switchAccount(); setOpen(false); navigate("/frontpage") }}
+            onClick={() => { switchAccount(); setOpen(false); navigate(ROUTES.HOME) }}
             className="w-full text-left px-4 py-2 text-sm text-slate-600 hover:bg-slate-50"
           >
             Byt konto
           </button>
           <button
-            onClick={() => { switchUser(); setOpen(false); navigate("/frontpage") }}
+            onClick={() => { switchUser(); setOpen(false); navigate(ROUTES.HOME) }}
             className="w-full text-left px-4 py-2 text-sm text-slate-600 hover:bg-slate-50"
           >
             Byt användare
           </button>
           <button
-            onClick={() => { setOpen(false); navigate("/manage-account") }}
+            onClick={() => { setOpen(false); navigate(ROUTES.MANAGE_ACCOUNT) }}
             className="w-full text-left px-4 py-2 text-sm text-slate-600 hover:bg-slate-50"
           >
             Hantera konto

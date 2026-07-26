@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { useSession } from "../context/SessionContext.jsx"
+import { styles } from "../utils/styles.js"
 import CreateUserForm from "./CreateUserForm.jsx"
 
 function SelectUserStep() {
@@ -14,14 +15,14 @@ function SelectUserStep() {
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-md p-8 w-full max-w-sm">
-      <h1 className="text-2xl font-semibold text-slate-800 mb-1">Välkommen!</h1>
-      <p className="text-slate-500 text-sm mb-6">Välj användare eller skapa en ny</p>
+    <div className={styles.card}>
+      <h1 className={styles.cardTitle}>Välkommen!</h1>
+      <p className={styles.cardSubtitle}>Välj användare eller skapa en ny</p>
 
       <nav className="flex flex-col gap-3">
         <button
           onClick={() => setShowCreateForm(!showCreateForm)}
-          className="w-full rounded-lg bg-slate-900 text-white py-2.5 font-medium hover:bg-slate-700 transition-colors"
+          className={styles.buttonPrimary}
         >
           Skapa användare
         </button>
@@ -34,7 +35,7 @@ function SelectUserStep() {
           />
         )}
 
-        <button className="w-full rounded-lg bg-slate-100 text-slate-800 py-2.5 font-medium hover:bg-slate-200 transition-colors">
+        <button className={styles.buttonSecondary}>
           Välj användare
         </button>
       </nav>

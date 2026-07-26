@@ -1,7 +1,7 @@
 import Navbar from "../components/Navbar.jsx"
 import { useSession } from "../context/SessionContext.jsx"
 
-function ManageAccountPage() {
+function ManageAccount() {
   const { currentAccount } = useSession()
 
   return (
@@ -20,4 +20,4 @@ function ManageAccountPage() {
   )
 }
 
-export default ManageAccountPage
+export default ManageAccount

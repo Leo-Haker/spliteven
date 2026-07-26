@@ -1,24 +1,25 @@
-import './index.css'
+import '../index.css'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Frontpage from './Frontpage.jsx'
-import Register from './Register.jsx'
-import Expense from './Expense.jsx'
-import Balance from './Balance.jsx'
-import ManageAccount from "./ManageAccount.jsx"
+import { ROUTES } from '../utils/routes.js'
 import { SessionProvider } from '../context/SessionContext.jsx'
+import Frontpage from "./Frontpage.jsx"
+import Register from "./Register.jsx"
+import Expense from "./Expense.jsx"
+import Balance from "./Balance.jsx"
+import ManageAccount from './ManageAccount.jsx'
 
 createRoot(document.getElementById('root')).render(
     <StrictMode>
         <SessionProvider>
             <BrowserRouter>
                 <Routes>
-                    <Route path="/" element={<Frontpage/>} />
-                    <Route path="/register" element={<Register />} />
-                    <Route path="/expense" element={<Expense />} />
-                    <Route path="/balance" element={<Balance />} />
-                    <Route path="/manageAccount" element={<ManageAccount />} />
+                    <Route path={ROUTES.HOME} element={<Frontpage/>} />
+                    <Route path={ROUTES.REGISTER} element={<Register />} />
+                    <Route path={ROUTES.EXPENSES} element={<Expense />} />
+                    <Route path={ROUTES.BALANCE} element={<Balance />} />
+                    <Route path={ROUTES.MANAGE_ACCOUNT} element={<ManageAccount />} />
                 </Routes>
             </BrowserRouter>
         </SessionProvider>

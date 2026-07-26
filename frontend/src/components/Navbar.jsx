@@ -1,10 +1,12 @@
 import { NavLink } from "react-router-dom" 
+import { ROUTES } from "../utils/routes.js"
+import { styles } from "../utils/styles.js"
 import UserMenu from "./UserMenu.jsx"
 
 function linkStyle({isActive}){
     return isActive
-    ? "text-slate-900 font-medium"
-    : "text-slate-600 hover:text-slate-900 transition-colors"
+    ? styles.navLinkActive
+    : styles.navLinkInactive
 }
 
 function Navbar(){
@@ -17,10 +19,10 @@ function Navbar(){
         </div>
 
         <nav className="flex flex-wrap justify-center gap-4 md:flex-1 md:gap-6 pt-2 md:pt-0">
-            <NavLink to="/" className={linkStyle}> Hem </NavLink>
-            <NavLink to="/register" className={linkStyle}> Lägg till utgift </NavLink>
-            <NavLink to="/expense" className={linkStyle}> Se utgifter </NavLink>
-            <NavLink to="/balance" className={linkStyle}> Balansöversikt </NavLink>
+            <NavLink to={ROUTES.HOME} className={linkStyle}> Hem </NavLink>
+            <NavLink to={ROUTES.REGISTER} className={linkStyle}> Lägg till utgift </NavLink>
+            <NavLink to={ROUTES.EXPENSES} className={linkStyle}> Se utgifter </NavLink>
+            <NavLink to={ROUTES.BALANCE} className={linkStyle}> Balansöversikt </NavLink>
         </nav>
 
         <div className="hidden md:flex md:flex-1 justify-end">
