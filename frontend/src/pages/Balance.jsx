@@ -1,14 +1,14 @@
-import Navbar from "./components/Navbar.jsx"
+import Navbar from '../components/Navbar.jsx'
 
-function Expense() {
+function Balance() {
   return (
     <div>
-    <Navbar/>
+        <Navbar/>
 
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+   <div className="min-h-screen bg-slate-50 flex items-center justify-center">
       <div className="bg-white rounded-2xl shadow-md p-8 w-full max-w-sm">
         <h1 className="text-2xl font-semibold text-slate-800 mb-1">
-          Expense
+          Balance
         </h1>
         <p className="text-slate-500 text-sm mb-6">
           Håll koll på det ni lägger ut för varandra
@@ -26,9 +26,10 @@ function Expense() {
           </button>
         </nav>
       </div>
-        </div>
     </div>
+    </div>
+ 
   )
 }
 
-export default Expense
+export default Balance
