@@ -2,11 +2,19 @@ import { NavLink } from "react-router-dom"
 import { ROUTES } from "../utils/routes.js"
 import { styles } from "../utils/styles.js"
 import UserMenu from "./UserMenu.jsx"
+import { useSession } from "../context/SessionContext.jsx"
 
 function linkStyle({isActive}){
     return isActive
     ? styles.navLinkActive
     : styles.navLinkInactive
+}
+
+function ActiveNavLink({route, name}){
+    const { currentUser, currentAccount } = useSession()
+    return currentUser && currentAccount
+    ? <NavLink to={route} className={linkStyle}> {name} </NavLink>
+    : null
 }
 
 function Navbar(){
@@ -19,10 +27,10 @@ function Navbar(){
         </div>
 
         <nav className="flex flex-wrap justify-center gap-4 md:flex-1 md:gap-6 pt-2 md:pt-0">
-            <NavLink to={ROUTES.HOME} className={linkStyle}> Hem </NavLink>
-            <NavLink to={ROUTES.REGISTER} className={linkStyle}> Lägg till utgift </NavLink>
-            <NavLink to={ROUTES.EXPENSES} className={linkStyle}> Se utgifter </NavLink>
-            <NavLink to={ROUTES.BALANCE} className={linkStyle}> Balansöversikt </NavLink>
+            <ActiveNavLink route={ROUTES.HOME} name="Hem"/>
+            <ActiveNavLink route={ROUTES.REGISTER} name="Lägg till utgift"/>
+            <ActiveNavLink route={ROUTES.EXPENSES} name="Se utgifter"/>
+            <ActiveNavLink route={ROUTES.BALANCE} name="Balansöversikt"/>
         </nav>
 
         <div className="hidden md:flex md:flex-1 justify-end">
