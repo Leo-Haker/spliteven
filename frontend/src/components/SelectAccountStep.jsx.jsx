@@ -2,11 +2,14 @@ import { useState } from "react"
 import { styles } from "../utils/styles.js"
 import CreateAccountForm from "./CreateAccountForm"
 import { createAccount } from "../utils/api.js"
+import { useSession } from "../context/SessionContext.jsx"
 
 
 function SelectAccountStep({ onAccountSelected }) {
+    const { currentUser } = useSession()
     const [showCreateForm, setShowCreateForm] = useState(false)
     const [name, setName] = useState("")
+    const [error, setError] = useState(null) 
 
     async function createNewAccount(e) {
         e.preventDefault()
