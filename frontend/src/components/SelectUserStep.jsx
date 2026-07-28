@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useSession } from "../context/SessionContext.jsx"
 import { styles } from "../utils/styles.js"
+import { createPerson } from "../utils/api.js"
 import CreateUserForm from "./CreateUserForm.jsx"
 
 function SelectUserStep() {
@@ -8,16 +9,24 @@ function SelectUserStep() {
   const [showCreateForm, setShowCreateForm] = useState(false)
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
+  const [error, setError] = useState(null)
 
-  function createNewUser(e) {
+  async function createNewUser(e) {
     e.preventDefault()
-    setCurrentUser({ id: null, name, email })
+    try {
+        const savedPerson = await createPerson(name, email)
+        setCurrentUser(savedPerson)
+    } catch (err) {
+        setError(err.message)
+    }
   }
 
   return (
     <div className={styles.card}>
       <h1 className={styles.cardTitle}>Välkommen!</h1>
       <p className={styles.cardSubtitle}>Välj användare eller skapa en ny</p>
+
+      {error && <p className="text-red-600 text-sm mb-2">{error}</p>}
 
       <nav className="flex flex-col gap-3">
         <button
