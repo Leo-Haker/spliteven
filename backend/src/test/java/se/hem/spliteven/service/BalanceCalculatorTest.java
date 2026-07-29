@@ -38,7 +38,7 @@ public class BalanceCalculatorTest {
         Expense expense = new Expense(account, personOne, false, "Groceries",
                 BigDecimal.valueOf(100), LocalDate.of(2026, 7, 10));
 
-        Map<Person, BigDecimal> balances = calculator.calculateBalances(List.of(expense), july);
+        Map<Person, BigDecimal> balances = calculator.calculateBalances(List.of(expense), july, july);
 
         assertEquals(new BigDecimal("50.00").setScale(2), balances.get(personOne).setScale(2));
         assertEquals(new BigDecimal("-50.00").setScale(2), balances.get(personTwo).setScale(2));
@@ -53,7 +53,7 @@ public class BalanceCalculatorTest {
         Expense expense = new Expense(account, personOne, false, "Dinner",
                 BigDecimal.valueOf(90), LocalDate.of(2026, 7, 10));
 
-        Map<Person, BigDecimal> balances = threePersonCalculator.calculateBalances(List.of(expense), july);
+        Map<Person, BigDecimal> balances = threePersonCalculator.calculateBalances(List.of(expense), july, july);
 
         BigDecimal sum = balances.values().stream()
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -67,7 +67,7 @@ public class BalanceCalculatorTest {
         Expense juneExpense = new Expense(account, personOne, false, "Old groceries",
                 BigDecimal.valueOf(100), LocalDate.of(2026, 6, 15));
 
-        Map<Person, BigDecimal> balances = calculator.calculateBalances(List.of(juneExpense), july);
+        Map<Person, BigDecimal> balances = calculator.calculateBalances(List.of(juneExpense), july, july);
 
         assertEquals(BigDecimal.ZERO.setScale(2), balances.get(personOne).setScale(2));
         assertEquals(BigDecimal.ZERO.setScale(2), balances.get(personTwo).setScale(2));
@@ -81,7 +81,7 @@ public class BalanceCalculatorTest {
                 BigDecimal.valueOf(50), LocalDate.of(2026, 7, 5));
 
         assertThrows(IllegalStateException.class,
-                () -> calculator.calculateBalances(List.of(foreignExpense), july));
+                () -> calculator.calculateBalances(List.of(foreignExpense), july, july));
     }
 
     @Test
@@ -91,7 +91,7 @@ public class BalanceCalculatorTest {
                 BigDecimal.valueOf(50), LocalDate.of(2026, 7, 5));
 
         assertThrows(IllegalStateException.class,
-                () -> calculator.calculateBalances(List.of(expense), july));
+                () -> calculator.calculateBalances(List.of(expense), july, july));
     }
 
     @Test
@@ -100,7 +100,7 @@ public class BalanceCalculatorTest {
         Expense income = new Expense(account, personOne, true, "Refund",
                 BigDecimal.valueOf(100), LocalDate.of(2026, 7, 10));
 
-        Map<Person, BigDecimal> balances = calculator.calculateBalances(List.of(income), july);
+        Map<Person, BigDecimal> balances = calculator.calculateBalances(List.of(income), july, july);
 
         // Sum should still be zero regardless of income vs expense
         BigDecimal sum = balances.values().stream().reduce(BigDecimal.ZERO, BigDecimal::add);

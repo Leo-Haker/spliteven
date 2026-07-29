@@ -22,7 +22,7 @@ public class BalanceCalculator {
         this.account = account;
     }
 
-    public Map<Person, BigDecimal> calculateBalances(List<Expense> expenses, YearMonth month) {
+    public Map<Person, BigDecimal> calculateBalances(List<Expense> expenses, YearMonth from, YearMonth to) {
         Map<Person, BigDecimal> balances = new HashMap<>();
 
         for (Person person : account.getPersons()) {
@@ -31,38 +31,39 @@ public class BalanceCalculator {
 
         for (Expense expense : expenses) {
             if (!expense.getAccount().equals(account)) {
-                throw new IllegalStateException(
-                        "Expense does not belong to this account.");
+                throw new IllegalStateException("Expense does not belong to this account.");
             }
 
-            if (!checkDate(expense, month)) {
+            if (!inRange(expense, from, to)) {
                 continue;
             }
 
             Person paidBy = expense.getPaidBy();
 
             if (!account.isAccountMember(paidBy)) {
-                throw new IllegalStateException(
-                        "Expense payer is not a member of the account.");
+                throw new IllegalStateException("Expense payer is not a member of the account.");
             }
 
             addToBalance(balances, paidBy, expense.getOwnAmount());
 
             for (Person person : account.getPersons()) {
                 if (!person.equals(paidBy)) {
-                    addToBalance(
-                            balances,
-                            person,
-                            expense.getSharePerOtherMember());
+                    addToBalance(balances, person, expense.getSharePerOtherMember());
                 }
             }
-
         }
         return Map.copyOf(balances);
     }
 
-    private boolean checkDate(Expense expense, YearMonth month) {
-        return YearMonth.from(expense.getDate()).equals(month);
+    private boolean inRange(Expense expense, YearMonth from, YearMonth to) {
+        YearMonth expenseMonth = YearMonth.from(expense.getDate());
+        return !expenseMonth.isBefore(from) && !expenseMonth.isAfter(to);
+    }
+
+    // Hjälpmetod: en enda persons totala saldo i kontot, för balansöversikten
+    public BigDecimal calculateBalanceForPerson(Person person, List<Expense> expenses, YearMonth from, YearMonth to) {
+        Map<Person, BigDecimal> balances = calculateBalances(expenses, from, to);
+        return balances.getOrDefault(person, BigDecimal.ZERO);
     }
 
     private void addToBalance(Map<Person, BigDecimal> balances, Person person, BigDecimal amount) {

@@ -123,6 +123,10 @@ public class Expense {
         this.date = date;
     }
 
+    public boolean isIncome() {
+        return income;
+    }
+
     public BigDecimal getSharePerOtherMember() {
         BigDecimal numberOfOtherPersons = BigDecimal.valueOf(account.numberOfMembers() - 1);
         BigDecimal otherShare = BigDecimal.valueOf(100 - ownSharePercentage)
