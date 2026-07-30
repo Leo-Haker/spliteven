@@ -1,44 +1,76 @@
 import Navbar from "../components/Navbar.jsx"
 import Table from "../components/Table.jsx"
+import { useState, useEffect } from "react"
+import { useSession } from "../context/SessionContext.jsx"
+import { getExpensesForAccount } from "../utils/api.js"
 
 function Expense() {
+    const [expenses, setExpenses] = useState([])
+    const {currentUser ,currentAccount} = useSession()
+    const [error, setError] = useState(null)
+    const [filter, setFilter] = useState("all") 
+    const visibleExpenses = filter === "mine"
+     ? expenses.filter(e => e.paidByName === currentUser.name)
+     : expenses
+    
+
+    useEffect(() => {
+        if (!currentAccount) return
+
+        getExpensesForAccount(currentAccount.id)
+            .then(setExpenses)
+            .catch((err) => setError(err.message))
+    }, [currentAccount])
+
+    
+
   return (
     <div>
-    <Navbar/>
-
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-      <div className="bg-white rounded-2xl shadow-md p-8 w-full max-w-sm">
-        <h1 className="text-2xl font-semibold text-slate-800 mb-1">
-          Expense
+      <Navbar />
+      <div className="min-h-screen bg-slate-50 p-8">
+        <h1 className="text-2xl font-semibold text-slate-800 mb-4">
+          Utgifter{currentAccount ? ` – ${currentAccount.name}` : ""}
         </h1>
-        <p className="text-slate-500 text-sm mb-6">
-          Håll koll på det ni lägger ut för varandra
-        </p>
 
-        <nav className="flex flex-col gap-3">
-          <button className="w-full rounded-lg bg-slate-900 text-white py-2.5 font-medium hover:bg-slate-700 transition-colors">
-            Lägg till utgift
-          </button>
-          <button className="w-full rounded-lg bg-slate-100 text-slate-800 py-2.5 font-medium hover:bg-slate-200 transition-colors">
-            Se utgifter
-          </button>
-          <button className="w-full rounded-lg bg-slate-100 text-slate-800 py-2.5 font-medium hover:bg-slate-200 transition-colors">
-            Balansöversikt
-          </button>
-        </nav>
-      </div>
+        <div className="flex gap-4 mb-4">
+          <label className="flex items-center gap-2 text-sm text-slate-600">
+            <input
+              type="radio"
+              name="filter"
+              value="all"
+              checked={filter === "all"}
+              onChange={() => setFilter("all")}
+            />
+            Alla utgifter
+          </label>
+          <label className="flex items-center gap-2 text-sm text-slate-600">
+            <input
+              type="radio"
+              name="filter"
+              value="mine"
+              checked={filter === "mine"}
+              onChange={() => setFilter("mine")}
+            />
+            Bara mina
+          </label>
         </div>
 
-        <Table
+
+        {error && <p className="text-red-600 text-sm mb-2">{error}</p>}
+
+        <div className="bg-white rounded-2xl shadow-md p-6">
+          <Table
             columns={[
-                { key: "date", header: "Datum" },
-                { key: "description", header: "Beskrivning" },
-                { key: "paidBy", header: "Betalad av", render: (row) => row.paidBy.name },
-                { key: "amount", header: "Belopp", render: (row) => `${row.amount} kr`},
-                ]}
-                data={expenses}
-                emptyMessage="Inga utgifter registrerade än"
-        ></Table>
+              { key: "date", header: "Datum" },
+              { key: "description", header: "Beskrivning" },
+              { key: "paidByName", header: "Betalad av" },
+              { key: "amount", header: "Belopp", render: (row) => `${row.amount} kr` },
+            ]}
+            data={visibleExpenses}
+            emptyMessage="Inga utgifter registrerade än"
+          />
+        </div>
+      </div>
     </div>
   )
 }

@@ -75,3 +75,9 @@ export async function createExpense(accountId, paidById, description, amount, da
   if (!res.ok) throw new Error("Kunde inte spara utgift")
   return res.json()
 }
+
+export async function getExpensesForAccount(accountId){
+    const res = await fetch(`${API_BASE}/expense/account/${accountId}`)
+    if (!res.ok) throw new Error("Kunde inte hämta utgifter")
+    return res.json()
+} 

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/expenses")
+@RequestMapping("/api/expense")
 public class ExpenseController {
 
     private final ExpenseRepository expenseRepository;
@@ -49,6 +49,6 @@ public class ExpenseController {
 
     private ExpenseDto toDto(Expense e) {
         return new ExpenseDto(e.getId(), e.getDescription(), e.getAmount(),
-                e.isIncome(), e.getPaidBy().getName(), e.getDate());
+                e.isIncome(), e.getPaidBy().getId(), e.getPaidBy().getName(), e.getDate());
     }
 }
