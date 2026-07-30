@@ -111,6 +111,11 @@ UPDATE person SET email = 'new@mail.com' WHERE id = 1;
 DELETE FROM person WHERE id = 1;
 ```
 ⚠️ `DELETE FROM person;` utan `WHERE` tar bort **alla** rader.
+```sql
+TRUNCATE TABLE account_person, account, person RESTART IDENTITY CASCADE;
+```
+`TRUNCATE` tömmer tabellerna helt (snabbare än `DELETE FROM` för stora mängder data), `RESTART IDENTITY` nollstället auto-increment-räknaren till 1 igen, `CASCADE` tar även bort beroende rader i andra tabeller (t.ex. `account_person`).
+
 
 ---
 

@@ -27,7 +27,6 @@ function Navbar(){
         </div>
 
         <nav className="flex flex-wrap justify-center gap-4 md:flex-1 md:gap-6 pt-2 md:pt-0">
-            <ActiveNavLink route={ROUTES.HOME} name="Hem"/>
             <ActiveNavLink route={ROUTES.REGISTER} name="Lägg till utgift"/>
             <ActiveNavLink route={ROUTES.EXPENSES} name="Se utgifter"/>
             <ActiveNavLink route={ROUTES.BALANCE} name="Balansöversikt"/>

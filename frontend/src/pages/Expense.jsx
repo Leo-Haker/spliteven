@@ -1,4 +1,5 @@
 import Navbar from "../components/Navbar.jsx"
+import Table from "../components/Table.jsx"
 
 function Expense() {
   return (
@@ -27,6 +28,17 @@ function Expense() {
         </nav>
       </div>
         </div>
+
+        <Table
+            columns={[
+                { key: "date", header: "Datum" },
+                { key: "description", header: "Beskrivning" },
+                { key: "paidBy", header: "Betalad av", render: (row) => row.paidBy.name },
+                { key: "amount", header: "Belopp", render: (row) => `${row.amount} kr`},
+                ]}
+                data={expenses}
+                emptyMessage="Inga utgifter registrerade än"
+        ></Table>
     </div>
   )
 }

@@ -10,4 +10,6 @@ export const styles = {
 
   navLinkActive: "text-slate-900 font-medium",
   navLinkInactive: "text-slate-600 hover:text-slate-900 transition-colors",
+
+  buttonMenuCenter: "min-h-screen bg-slate-50 flex items-center justify-center"
 }

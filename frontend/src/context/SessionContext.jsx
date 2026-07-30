@@ -1,10 +1,32 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useState, useEffect } from 'react'
 
 const SessionContext = createContext(null)
 
+function loadFromStorage(key){
+    const stored = localStorage.getItem(key)
+    return stored ? JSON.parse(stored) : null
+}
+
 export function SessionProvider({ children }) {
-  const [currentUser, setCurrentUser] = useState(null)
-  const [currentAccount, setCurrentAccount] = useState(null)
+  const [currentUser, setCurrentUser] = useState(() => loadFromStorage("currentUser"))
+  const [currentAccount, setCurrentAccount] = useState(() => loadFromStorage("currentAccount"))
+
+  useEffect(() => {
+    if (currentUser) {
+        localStorage.setItem("currentUser", JSON.stringify(currentUser))
+    } else {
+        localStorage.removeItem("currentUser")
+    }
+  }, [currentUser])
+
+  useEffect(() => {
+    if (currentAccount) {
+        localStorage.setItem("currentAccount", JSON.stringify(currentAccount))
+    } else {
+        localStorage.removeItem("currentAccount")
+    }
+  }, [currentAccount])
+
 
   function switchUser() {
     setCurrentUser(null)
