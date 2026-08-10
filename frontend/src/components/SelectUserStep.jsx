@@ -31,7 +31,7 @@ function SelectUserStep() {
       <nav className="flex flex-col gap-3">
         <button
           onClick={() => setShowCreateForm(!showCreateForm)}
-          className={styles.buttonPrimary}
+          className={showCreateForm ? styles.buttonSecondary : styles.buttonPrimary}
         >
           Skapa användare
         </button>
