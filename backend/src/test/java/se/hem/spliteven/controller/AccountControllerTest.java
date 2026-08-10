@@ -103,4 +103,29 @@ class AccountControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Nytt namn"));
     }
+
+    @Test
+    void getAccountsForPerson_returnsAccountsPersonIsMemberOf() throws Exception {
+        Long personId = createTestPerson("Medlem", "medlem@test.com");
+
+        mockMvc.perform(post("/api/accounts")
+                .contentType("application/json")
+                .content("""
+                        {"name":"Mitt konto", "personId":%d}
+                        """.formatted(personId)));
+
+        mockMvc.perform(get("/api/persons/{personId}/accounts", personId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1))
+                .andExpect(jsonPath("[0].name").value("Mitt konto"));
+    }
+
+    @Test
+    void getAccountsForPerson_returnsEmptyListWhenNoAccounts() throws Exception {
+        Long personId = createTestPerson("Utan konto", "utankonto@test.com");
+
+        mockMvc.perform(get("/api/persons/{personId}/accounts", personId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(0));
+    }
 }
