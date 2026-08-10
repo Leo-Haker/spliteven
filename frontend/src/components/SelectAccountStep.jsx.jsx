@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react"
 import { styles } from "../utils/styles.js"
-import CreateAccountForm from "./CreateAccountForm"
+import CreateAccountForm from "./CreateAccountForm.jsx"
 import { createAccount, getAccountsForPerson } from "../utils/api.js"
 import { useSession } from "../context/SessionContext.jsx"
+import SelectDropdown from "./SelectDropdown.jsx"
 
 
 function SelectAccountStep({ onAccountSelected }) {
@@ -74,18 +75,14 @@ function SelectAccountStep({ onAccountSelected }) {
                 <p className={styles.cardSubtitle}>Inga konton att välja mellan</p>
             ) : (
                 <form onSubmit={selectExistingAccount} className="flex flex-col gap-2 -mt-1">
-                    <select
+                    <SelectDropdown
+                        items={existingAccounts}
                         value={selectedAccountId}
-                        onChange={(e) => setSelectedAccountId(e.target.value)}
-                        className={styles.input}
-                        required
-                    >
-                        <option value="" disabled>Välj konto</option>
-                        {existingAccounts.map((a) => (
-                            <option key={a.id} value={a.id}>{a.name}</option>
-                        ))}
-
-                    </select>
+                        onChange={setSelectedAccountId}
+                        placeholder="Välj konto"
+                        getLabel={(account) => account.name}
+                        getValue={(account) => account.id}
+                    />
                     <button type="submit" className={styles.buttonPrimary}>
                         Bekräfta
                     </button>

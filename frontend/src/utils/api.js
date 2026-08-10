@@ -81,3 +81,9 @@ export async function getExpensesForAccount(accountId){
     if (!res.ok) throw new Error("Kunde inte hämta utgifter")
     return res.json()
 } 
+
+export async function getAllPersons(){
+    const res = await fetch(`${API_BASE}/persons`)
+    if (!res.ok) throw new Error("Kunde inte hämta alla personer")
+    return res.json()
+}

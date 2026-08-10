@@ -54,10 +54,12 @@ public class Account {
 
     public void addPerson(Person person) {
         persons.add(person);
+        person.addAccount(this);
     }
 
     public void removePerson(Person person) {
         persons.remove(person);
+        person.removeAccount(this);
     }
 
     public int numberOfMembers() {
