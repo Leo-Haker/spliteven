@@ -45,7 +45,7 @@ class ExpenseControllerTest {
         Long personId = createTestPerson("Betalare", "betalare@test.com");
         Long accountId = createTestAccount("Utgiftskonto", personId);
 
-        mockMvc.perform(post("/api/expenses")
+        mockMvc.perform(post("/api/expense")
                 .contentType("application/json")
                 .content("""
                         {"accountId":%d,"paidById":%d,"income":false,
@@ -62,14 +62,14 @@ class ExpenseControllerTest {
         Long personId = createTestPerson("Person", "person2@test.com");
         Long accountId = createTestAccount("Konto med utgifter", personId);
 
-        mockMvc.perform(post("/api/expenses")
+        mockMvc.perform(post("/api/expense")
                 .contentType("application/json")
                 .content("""
                         {"accountId":%d,"paidById":%d,"income":false,
                          "description":"Hyra","amount":5000.00,"date":"2026-07-01"}
                         """.formatted(accountId, personId)));
 
-        mockMvc.perform(get("/api/expenses/account/{accountId}", accountId))
+        mockMvc.perform(get("/api/expense/account/{accountId}", accountId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(1))
                 .andExpect(jsonPath("$[0].description").value("Hyra"));
