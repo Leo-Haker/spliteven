@@ -49,6 +49,7 @@ function ManageAccountPage() {
   }
 
   return (
+
     <div>
           <Navbar />
       <div className={styles.buttonMenuCenter}>

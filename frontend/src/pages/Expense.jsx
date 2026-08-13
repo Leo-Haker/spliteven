@@ -22,7 +22,8 @@ function Expense() {
             .catch((err) => setError(err.message))
     }, [currentAccount])
 
-    
+
+    if (!currentUser || !currentAccount) return <Frontpage/>
 
   return (
     <div>

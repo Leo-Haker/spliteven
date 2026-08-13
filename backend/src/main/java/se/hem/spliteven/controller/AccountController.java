@@ -1,27 +1,41 @@
 package se.hem.spliteven.controller;
 
+import se.hem.spliteven.dto.AccountBalanceDto;
 import se.hem.spliteven.dto.AccountDto;
+import se.hem.spliteven.dto.ExpenseDto;
 import se.hem.spliteven.dto.PersonDto;
 import se.hem.spliteven.dto.RenameAccountRequest;
 import se.hem.spliteven.model.Account;
+import se.hem.spliteven.model.Expense;
 import se.hem.spliteven.model.Person;
 import se.hem.spliteven.repository.AccountRepository;
+import se.hem.spliteven.repository.ExpenseRepository;
 import se.hem.spliteven.repository.PersonRepository;
+import se.hem.spliteven.service.BalanceCalculator;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
+
+import jakarta.websocket.server.PathParam;
 
 @RestController
 @RequestMapping("/api/accounts")
 public class AccountController {
 
+    private final ExpenseRepository expenseRepository;
     private final AccountRepository accountRepository;
     private final PersonRepository personRepository;
 
-    public AccountController(AccountRepository accountRepository, PersonRepository personRepository) {
+    public AccountController(AccountRepository accountRepository, PersonRepository personRepository,
+            ExpenseRepository expenseRepository) {
         this.accountRepository = accountRepository;
         this.personRepository = personRepository;
+        this.expenseRepository = expenseRepository;
     }
 
     public record CreateAccountRequest(String name, Long personId) {
@@ -90,4 +104,5 @@ public class AccountController {
                 .map(a -> ResponseEntity.ok(toDto(a)))
                 .orElse(ResponseEntity.notFound().build());
     }
+
 }

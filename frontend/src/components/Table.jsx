@@ -16,14 +16,14 @@ function Table({columns, data, emptyMessage="Ingen data att visa"}) {
             </thead>
             <tbody>
                 {data.map((row, i) => (
-  <tr key={row.id ?? i} className="border-b border-slate-100 hover:bg-slate-50">
-    {columns.map((col) => (
-      <td key={col.key} className="py-2 px-3 text-slate-700">
-        {col.render ? col.render(row) : row[col.key]}
-      </td>
-    ))}
-  </tr>
-))}
+                    <tr key={row.id ?? i} className="border-b border-slate-100 hover:bg-slate-50">
+                        {columns.map((col) => (
+                            <td key={col.key} className="py-2 px-3 text-slate-700">
+                                {col.render ? col.render(row) : row[col.key]}
+                            </td>
+                        ))}
+                    </tr>
+                ))}
             </tbody>
         </table>
     )

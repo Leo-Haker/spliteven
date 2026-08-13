@@ -11,6 +11,8 @@ function AddExpenseForm({ onAdded }) {
   const [amount, setAmount] = useState("")
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10))
   const [error, setError] = useState(null)
+  const [filter, setFilter] = useState("expense")
+  const income = filter === "income"
 
   useEffect(() => {
     if (!currentUser) return
@@ -22,7 +24,7 @@ function AddExpenseForm({ onAdded }) {
   async function handleSubmit(e) {
     e.preventDefault()
     try {
-      await createExpense(accountId, currentUser.id, description, Number(amount), date)
+      await createExpense(currentAccount.id, currentUser.id, description, Number(amount), date, income)
       setDescription("")
       setAmount("")
       if (onAdded) onAdded()
@@ -35,17 +37,45 @@ function AddExpenseForm({ onAdded }) {
     <form onSubmit={handleSubmit} className="flex flex-col gap-2">
       {error && <p className="text-red-600 text-sm">{error}</p>}
 
-      <select
-        value={accountId}
-        onChange={(e) => setAccountId(e.target.value)}
+      <div className={`${styles.input} bg-slate-50`}>
+        <span className="text-slate-500">Konto</span>
+        <span className="ml-2 font-medium text-slate-800">
+            {currentAccount?.name}
+        </span>
+      </div>
+
+      <div className="flex px-3 gap-4 mb-4">
+          <label className="flex items-center gap-2 text-sm text-slate-600">
+            <input
+              type="radio"
+              name="filter"
+              value="expense"
+              checked={filter === "expense"}
+              onChange={() => setFilter("expense")}
+            />
+            Utgift
+          </label>
+          <label className="flex items-center gap-2 text-sm text-slate-600">
+            <input
+              type="radio"
+              name="filter"
+              value="income"
+              checked={filter === "income"}
+              onChange={() => setFilter("income")}
+            />
+            Inkomst
+          </label>
+        </div>
+
+     <input
+        type="number"
+        step="0.01"
+        placeholder="Belopp"
+        value={amount}
+        onChange={(e) => setAmount(e.target.value)}
         className={styles.input}
         required
-      >
-        <option value="" disabled>Välj konto</option>
-        {accounts.map((a) => (
-          <option key={a.id} value={a.id}>{a.name}</option>
-        ))}
-      </select>
+      />
 
       <input
         type="text"
@@ -56,15 +86,6 @@ function AddExpenseForm({ onAdded }) {
         required
       />
 
-      <input
-        type="number"
-        step="0.01"
-        placeholder="Belopp"
-        value={amount}
-        onChange={(e) => setAmount(e.target.value)}
-        className={styles.input}
-        required
-      />
 
       <input
         type="date"

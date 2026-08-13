@@ -70,6 +70,13 @@ public class PersonController {
 
         return person.getAccounts().stream().map(account -> {
             List<Expense> expenses = expenseRepository.findByAccountId(account.getId());
+            // check
+            expenses.forEach(e -> System.out.println(
+                    e.getId() + " | " +
+                            e.getAmount() + " | " +
+                            e.getDate() + " | " +
+                            e.getPaidBy().getName()));
+
             BalanceCalculator calculator = new BalanceCalculator(account);
             BigDecimal balance = calculator.calculateBalanceForPerson(person, expenses, fromMonth, toMonth);
             return new AccountBalanceDto(account.getId(), account.getName(), balance);

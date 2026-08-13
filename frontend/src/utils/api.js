@@ -67,7 +67,7 @@ export async function getAccountsForPerson(personId) {
 }
 
 export async function createExpense(accountId, paidById, description, amount, date, income = false) {
-  const res = await fetch(`${API_BASE}/expenses`, {
+  const res = await fetch(`${API_BASE}/expense`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ accountId, paidById, income, description, amount, date }),

@@ -11,7 +11,7 @@ function currentYearMonth(){
 }
 
 function Balance() {
-    const { currentUser } = useSession()
+    const { currentUser, currentAccount } = useSession()
     const [balances, setBalances] = useState([])
     const [from, setFrom] = useState(currentYearMonth())
     const [to, setTo] = useState(currentYearMonth())
@@ -25,6 +25,8 @@ function Balance() {
             .catch((err) => setError(err.message))
     }, [currentUser, from, to])
 
+
+    if (!currentUser || !currentAccount) return <Frontpage/>
 
   return (
     <div>

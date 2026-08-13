@@ -74,7 +74,7 @@ function SelectUserStep() {
 
         {showJoinForm && (
             existingUsers.length === 0 ? (
-                <p className={styles.cardSubtitle}>Inga konton att välja mellan</p>
+                <p className={styles.cardSubtitle}>Inga användare att välja mellan</p>
             ) : (
                 <form onSubmit={selectExistingUser} className="flex flex-col gap-2 -mt-1">
                     <SelectDropdown
