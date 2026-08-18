@@ -87,3 +87,35 @@ export async function getAllPersons(){
     if (!res.ok) throw new Error("Kunde inte hämta alla personer")
     return res.json()
 }
+
+export async function findPersonByEmail(email) {
+    const res = await fetch(`${API_BASE}/persons/by-email?email=${encodeURIComponent(email)}`)
+    if (!res.ok) throw new Error("Ingen användare med den e-postadressen")
+    return res.json()
+}
+
+export async function createMembershipRequest(accountId, email) {
+    const res = await fetch(`${API_BASE}/accounts/${accountId}/requests`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json"},
+        body: JSON.stringify({ email }),
+    })
+
+    if (!res.ok) throw new Error("Kunde inte skicka förfrågan")
+}
+
+export async function getPendingRequests(personId) {
+    const res = await fetch(`${API_BASE}/requests/${personId}/requests`)
+    if (!res.ok) throw new Error("Kunde inte hämta förfrågningar")
+    return res.json()
+}
+
+export async function acceptRequest(requestId) {
+    const res = await fetch(`${API_BASE}/requests/${requestId}/accept`, { method: "POST"})
+    if (!res.ok) throw new Error("kunde inte godkänna förfrågan")
+}
+
+export async function declineRequest(requestId) {
+    const res = await fetch(`${API_BASE}/requests/${requestId}/decline`, { method: "POST"})
+    if (!res.ok) throw new Error("kunde inte neka förfrågan")
+}

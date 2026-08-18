@@ -112,7 +112,7 @@ DELETE FROM person WHERE id = 1;
 ```
 ⚠️ `DELETE FROM person;` utan `WHERE` tar bort **alla** rader.
 ```sql
-TRUNCATE TABLE account_person, account, person RESTART IDENTITY CASCADE;
+TRUNCATE TABLE membership_request, expense, account_person, account, person RESTART IDENTITY CASCADE;
 ```
 `TRUNCATE` tömmer tabellerna helt (snabbare än `DELETE FROM` för stora mängder data), `RESTART IDENTITY` nollstället auto-increment-räknaren till 1 igen, `CASCADE` tar även bort beroende rader i andra tabeller (t.ex. `account_person`).
 
@@ -134,6 +134,11 @@ TRUNCATE TABLE account_person, account, person RESTART IDENTITY CASCADE;
 **Köra en SQL-fil från terminalen:**
 ```bash
 psql -h localhost -U user -d dbname -f schema.sql
+```
+
+**Öppna SQL i terminalen:**
+```bash
+psql -h localhost -U user -d dbname 
 ```
 
 ---

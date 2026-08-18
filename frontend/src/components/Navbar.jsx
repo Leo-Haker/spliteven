@@ -2,6 +2,7 @@ import { NavLink } from "react-router-dom"
 import { ROUTES } from "../utils/routes.js"
 import { styles } from "../utils/styles.js"
 import UserMenu from "./UserMenu.jsx"
+import RequestMenu from "./RequestsMenu.jsx"
 import { useSession } from "../context/SessionContext.jsx"
 
 function linkStyle({isActive}){
@@ -32,7 +33,8 @@ function Navbar(){
             <ActiveNavLink route={ROUTES.BALANCE} name="Balansöversikt"/>
         </nav>
 
-        <div className="hidden md:flex md:flex-1 justify-end">
+        <div className="hidden md:flex md:flex-1 justify-end gap-4 items-center">
+            <RequestMenu />
             <UserMenu />
         </div>
 
