@@ -14,51 +14,13 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-public class MembershipRequestControllerTest {
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    private final ObjectMapper objectMapper = new ObjectMapper();
-
-    private Long createTestPerson(String name, String email) throws Exception {
-        String response = mockMvc.perform(post("/api/persons")
-                .contentType("application/json")
-                .content("""
-                        {"name":"%s","email":"%s"}
-                        """.formatted(name, email)))
-                .andReturn().getResponse().getContentAsString();
-
-        return objectMapper.readTree(response).get("id").asLong();
-    }
-
-    private Long createTestAccount(String name, Long personId) throws Exception {
-        String response = mockMvc.perform(post("/api/accounts")
-                .contentType("application/json")
-                .content("""
-                        {"name":"%s","personId":%d}
-                        """.formatted(name, personId)))
-                .andReturn().getResponse().getContentAsString();
-
-        return objectMapper.readTree(response).get("id").asLong();
-    }
-
-    private Long createTestRequest(Long accountId, String email) throws Exception {
-        String response = mockMvc.perform(post("/api/accounts/{accountId}/requests", accountId)
-                .contentType("application/json")
-                .content("""
-                        {"email":"%s"}
-                        """.formatted(email)))
-                .andReturn().getResponse().getContentAsString();
-
-        return objectMapper.readTree(response).get("id").asLong();
-    }
+public class MembershipRequestControllerTest extends AbstractControllerTest {
 
     @Test
     void create_savesRequestForPersonFoundByEmail() throws Exception {
         Long creatorId = createTestPerson("Skapare", "skapare@test.com");
         Long accountId = createTestAccount("konto", creatorId);
-        Long invitedId = createTestPerson("Inbjuden", "inbjuden@test.com");
+        createTestPerson("Inbjuden", "inbjuden@test.com");
 
         mockMvc.perform(post("/api/accounts/{accountId}/requests", accountId)
                 .contentType("application/json")

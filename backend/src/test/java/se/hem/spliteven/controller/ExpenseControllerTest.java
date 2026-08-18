@@ -14,33 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-class ExpenseControllerTest {
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    private final ObjectMapper objectMapper = new ObjectMapper();
-
-    private Long createTestPerson(String name, String email) throws Exception {
-        String response = mockMvc.perform(post("/api/persons")
-                .contentType("application/json")
-                .content("""
-                        {"name":"%s","email":"%s"}
-                        """.formatted(name, email)))
-                .andReturn().getResponse().getContentAsString();
-
-        return objectMapper.readTree(response).get("id").asLong();
-    }
-
-    private Long createTestAccount(String name, Long personId) throws Exception {
-        String response = mockMvc.perform(post("/api/accounts")
-                .contentType("application/json")
-                .content("""
-                        {"name":"%s","personId":%d}
-                        """.formatted(name, personId)))
-                .andReturn().getResponse().getContentAsString();
-        return objectMapper.readTree(response).get("id").asLong();
-    }
+class ExpenseControllerTest extends AbstractControllerTest {
 
     @Test
     void createExpense_savesAndReturnsExpense() throws Exception {

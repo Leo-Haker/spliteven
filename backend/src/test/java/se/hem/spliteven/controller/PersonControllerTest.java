@@ -14,23 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-class PersonControllerTest {
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    private final ObjectMapper objectMapper = new ObjectMapper();
-
-    private Long createTestPerson(String name, String email) throws Exception {
-        String response = mockMvc.perform(post("/api/persons")
-                .contentType("application/json")
-                .content("""
-                        {"name":"%s","email":"%s"}
-                        """.formatted(name, email)))
-                .andReturn().getResponse().getContentAsString();
-
-        return objectMapper.readTree(response).get("id").asLong();
-    }
+class PersonControllerTest extends AbstractControllerTest {
 
     @Test
     void createPerson_savesAndReturnsPerson() throws Exception {
