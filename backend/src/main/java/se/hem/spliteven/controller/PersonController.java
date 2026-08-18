@@ -11,12 +11,15 @@ import se.hem.spliteven.repository.AccountRepository;
 import se.hem.spliteven.repository.ExpenseRepository;
 import se.hem.spliteven.service.BalanceCalculator;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
 import java.math.BigDecimal;
 import java.time.YearMonth;
 import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/api/persons")
@@ -46,6 +49,13 @@ public class PersonController {
 
     private PersonDto toDto(Person p) {
         return new PersonDto(p.getId(), p.getName(), p.getEmail());
+    }
+
+    @GetMapping("/by-email")
+    public ResponseEntity<PersonDto> getByEmail(@RequestParam String email) {
+        return personRepository.findByEmail(email)
+                .map(p -> ResponseEntity.ok(toDto(p)))
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/{personId}/accounts")
