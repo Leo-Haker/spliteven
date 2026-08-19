@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @SpringBootTest
@@ -23,7 +24,7 @@ public abstract class AbstractControllerTest {
         String response = mockMvc.perform(post("/api/persons")
                 .contentType("application/json")
                 .content("""
-                        {"name":"%s","email":"%s"}
+                        {"name":"%s","email":"%s", "password":"test1234"}
                         """.formatted(name, email)))
                 .andReturn().getResponse().getContentAsString();
 
@@ -50,5 +51,12 @@ public abstract class AbstractControllerTest {
                 .andReturn().getResponse().getContentAsString();
 
         return objectMapper.readTree(response).get("id").asLong();
+    }
+
+    protected int numberOfPersonsInDatabase() throws Exception {
+        String before = mockMvc.perform(get("/api/persons"))
+                .andReturn().getResponse().getContentAsString();
+        return objectMapper.readTree(before).size();
+
     }
 }

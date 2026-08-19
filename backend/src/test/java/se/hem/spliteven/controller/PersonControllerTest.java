@@ -21,7 +21,7 @@ class PersonControllerTest extends AbstractControllerTest {
         mockMvc.perform(post("/api/persons")
                 .contentType("application/json")
                 .content("""
-                        {"name":"Test Testsson","email":"test@example.com"}
+                        {"name":"Test Testsson","email":"test@example.com", "password":"testing123"}
                         """))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Test Testsson"))
@@ -41,19 +41,13 @@ class PersonControllerTest extends AbstractControllerTest {
 
     @Test
     void getPersons_returnsListOfPersons() throws Exception {
+        int before = numberOfPersonsInDatabase();
+
         createTestPerson("Person", "person@test.com");
 
         mockMvc.perform(get("/api/persons"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1))
-                .andExpect(jsonPath("[0].name").value("Person"));
-    }
-
-    @Test
-    void getPersons_returnsEmptyListWhenNoPerson() throws Exception {
-
-        mockMvc.perform(get("/api/persons"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(0));
+                .andExpect(jsonPath("$.length()").value(before + 1))
+                .andExpect(jsonPath("[?(@.name == 'Person')]").exists());
     }
 }

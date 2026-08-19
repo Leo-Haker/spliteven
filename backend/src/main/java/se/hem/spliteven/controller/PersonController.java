@@ -1,17 +1,20 @@
 package se.hem.spliteven.controller;
 
+import se.hem.spliteven.domain.BalanceCalculator;
 import se.hem.spliteven.dto.AccountBalanceDto;
 import se.hem.spliteven.dto.AccountDto;
+import se.hem.spliteven.dto.CreatePersonRequest;
 import se.hem.spliteven.dto.PersonDto;
 import se.hem.spliteven.model.Account;
 import se.hem.spliteven.model.Expense;
 import se.hem.spliteven.model.Person;
 import se.hem.spliteven.repository.PersonRepository;
+import se.hem.spliteven.service.PersonService;
 import se.hem.spliteven.repository.AccountRepository;
 import se.hem.spliteven.repository.ExpenseRepository;
-import se.hem.spliteven.service.BalanceCalculator;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
@@ -28,17 +31,21 @@ public class PersonController {
     private final PersonRepository personRepository;
     private final ExpenseRepository expenseRepository;
     private final AccountRepository accountRepository;
+    private final PersonService personService;
 
-    public PersonController(PersonRepository personRepository,
+    public PersonController(PersonRepository personRepository, PersonService personService,
             ExpenseRepository expenseRepository, AccountRepository accountRepository) {
         this.personRepository = personRepository;
         this.expenseRepository = expenseRepository;
         this.accountRepository = accountRepository;
+        this.personService = personService;
     }
 
     @PostMapping
-    public PersonDto create(@Valid @RequestBody Person person) {
-        Person saved = personRepository.save(person);
+    public PersonDto create(@Valid @RequestBody CreatePersonRequest request) {
+
+        Person saved = personService.createPerson(request);
+
         return toDto(saved);
     }
 

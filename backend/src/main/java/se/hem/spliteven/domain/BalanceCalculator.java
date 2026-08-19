@@ -1,4 +1,4 @@
-package se.hem.spliteven.service;
+package se.hem.spliteven.domain;
 
 import se.hem.spliteven.model.Account;
 import se.hem.spliteven.model.Expense;

@@ -1,5 +1,6 @@
 package se.hem.spliteven.controller;
 
+import se.hem.spliteven.domain.BalanceCalculator;
 import se.hem.spliteven.dto.AccountBalanceDto;
 import se.hem.spliteven.dto.AccountDto;
 import se.hem.spliteven.dto.ExpenseDto;
@@ -11,7 +12,6 @@ import se.hem.spliteven.model.Person;
 import se.hem.spliteven.repository.AccountRepository;
 import se.hem.spliteven.repository.ExpenseRepository;
 import se.hem.spliteven.repository.PersonRepository;
-import se.hem.spliteven.service.BalanceCalculator;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

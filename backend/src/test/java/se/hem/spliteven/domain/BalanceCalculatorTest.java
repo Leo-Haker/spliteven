@@ -1,7 +1,9 @@
-package se.hem.spliteven.service;
+package se.hem.spliteven.domain;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import se.hem.spliteven.domain.BalanceCalculator;
 import se.hem.spliteven.model.Account;
 import se.hem.spliteven.model.Expense;
 import se.hem.spliteven.model.Person;
@@ -24,8 +26,8 @@ public class BalanceCalculatorTest {
 
     @BeforeEach
     void setUp() {
-        personOne = new Person("JRR", "JRR@mail.com");
-        personTwo = new Person("Tolkien", "Tolkien@mail.com");
+        personOne = new Person("JRR", "JRR@mail.com", "youShallNotPass");
+        personTwo = new Person("Tolkien", "Tolkien@mail.com", "youShallNotPass");
         account = new Account("Home");
         account.addPerson(personOne);
         account.addPerson(personTwo);
@@ -46,7 +48,7 @@ public class BalanceCalculatorTest {
 
     @Test
     void balancesShouldAlwaysSumToZero() {
-        Person third = new Person("Kim", "kim@mail.com");
+        Person third = new Person("Kim", "kim@mail.com", "kimPassword");
         account.addPerson(third);
         BalanceCalculator threePersonCalculator = new BalanceCalculator(account);
 
@@ -86,7 +88,7 @@ public class BalanceCalculatorTest {
 
     @Test
     void payerNotMemberOfAccountThrows() {
-        Person outsider = new Person("Outsider", "outsider@mail.com");
+        Person outsider = new Person("Outsider", "outsider@mail.com", "outsiderPassword");
         Expense expense = new Expense(account, outsider, false, "Suspicious",
                 BigDecimal.valueOf(50), LocalDate.of(2026, 7, 5));
 
