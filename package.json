@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "concurrently -n backend,frontend -c blue,green \"cd backend && ./mvnw spring-boot:run\" \"cd frontend && npm run dev\""
+    "dev": "dotenv -e .env -- concurrently -n backend,frontend -c blue,green \"cd backend && ./mvnw spring-boot:run\" \"cd frontend && npm run dev\""
   },
   "repository": {
     "type": "git",
@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/Leo-Haker/spliteven#readme",
   "devDependencies": {
-    "concurrently": "^10.0.4"
-  }  
+    "concurrently": "^10.0.4",
+    "dotenv-cli": "^11.0.0"
+  }
 }

@@ -8,6 +8,7 @@ import se.hem.spliteven.model.MembershipRequest;
 import se.hem.spliteven.repository.AccountRepository;
 import se.hem.spliteven.repository.MembershipRequestRepository;
 import se.hem.spliteven.repository.PersonRepository;
+import se.hem.spliteven.service.EmailService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,13 +19,24 @@ public class MembershipRequestController {
     private final MembershipRequestRepository requestRepository;
     private final AccountRepository accountRepository;
     private final PersonRepository personRepository;
+    private final EmailService emailService;
 
     public MembershipRequestController(MembershipRequestRepository requestRepository,
             AccountRepository accountRepository,
-            PersonRepository personRepository) {
+            PersonRepository personRepository,
+            EmailService emailService) {
         this.requestRepository = requestRepository;
         this.accountRepository = accountRepository;
         this.personRepository = personRepository;
+        this.emailService = emailService;
+    }
+
+    private void sendEmail(String email, String accountName) {
+        try {
+            emailService.sendMembershipInvite(email, accountName);
+        } catch (Exception e) {
+            System.err.println("Kunde inte skicka e-post: " + e.getMessage());
+        }
     }
 
     // Create a request: the account invites another person to join by email
@@ -43,7 +55,7 @@ public class MembershipRequestController {
         MembershipRequestDto dto = new MembershipRequestDto(
                 saved.getId(), saved.getAccount().getId(), saved.getAccount().getName(), saved.getStatus().name());
 
-        // Maybe later send an email to inform about the invite ??
+        sendEmail(person.getEmail(), account.getName());
 
         return ResponseEntity.ok(dto);
     }
