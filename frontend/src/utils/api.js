@@ -1,14 +1,26 @@
 const API_BASE = "http://localhost:8080/api"
 
-export async function createPerson(name, email) {
+export async function createPerson(name, email, password) {
   const res = await fetch(`${API_BASE}/persons`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ name, email }),
+    body: JSON.stringify({ name, email, password}),
   })
   if (!res.ok) throw new Error("Kunde inte skapa användare")
   return res.json()
 }
+
+export async function login(email, password) {
+    const res = await fetch(`${API_BASE}/auth/login`, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({email, password})
+    })
+    if (!res.ok) throw new Error("Fel e-post eller lösenord")
+        return res.json()
+}
+
+
 
 export async function createAccount(name, personId) {
   const res = await fetch(`${API_BASE}/accounts`, {

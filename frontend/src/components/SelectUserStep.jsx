@@ -1,60 +1,57 @@
 import { useEffect, useState } from "react"
 import { useSession } from "../context/SessionContext.jsx"
 import { styles } from "../utils/styles.js"
-import { createPerson, getAllPersons } from "../utils/api.js"
+import { createPerson, login } from "../utils/api.js"
 import CreateUserForm from "./CreateUserForm.jsx"
-import SelectDropdown from "./SelectDropdown.jsx"
+import Login from "./Login.jsx"
 
 function SelectUserStep() {
   const { setCurrentUser } = useSession()
   const [showCreateForm, setShowCreateForm] = useState(false)
-  const [showJoinForm, setShowJoinForn] = useState(false)
+  const [showLogin, setShowLogin] = useState(false)
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState(null)
 
-  const [existingUsers, setExistingUsers] = useState([])
-    const [selectedUserId, setSelectedUserId] = useState("")
-
-  useEffect(() => {
-    if (!showJoinForm) return
-
-    getAllPersons()
-        .then(setExistingUsers)
-        .catch((err) => setError(err.message))
-  }, [showJoinForm, setExistingUsers])
+  function resetVariables(){
+    setName(""); setEmail(""); setPassword(""); setError(null);
+  }
 
   async function createNewUser(e) {
     e.preventDefault()
     try {
-        const savedPerson = await createPerson(name, email)
+        const savedPerson = await createPerson(name, email, password)
         setCurrentUser(savedPerson)
     } catch (err) {
         setError(err.message)
     }
+    resetVariables()
   }
 
-  function selectExistingUser(e){
+  async function handleLogin(e){
     e.preventDefault()
-    const user =  existingUsers.find((user) => user.id === Number(selectedUserId))
-
-    if (user) {
-        setCurrentUser(user)
+    try {
+        const loggedInPerson = await login(email, password)
+        setCurrentUser(loggedInPerson)
+    } catch (err) {
+        setError(err.message)
     }
+     resetVariables()
   }
+
 
   return (
     <div className={styles.card}>
       <h1 className={styles.cardTitle}>Välkommen!</h1>
-      <p className={styles.cardSubtitle}>Välj användare eller skapa en ny</p>
+      <p className={styles.cardSubtitle}>Logga in eller skapa en ny användare</p>
 
       {error && <p className="text-red-600 text-sm mb-2">{error}</p>}
 
       <nav className="flex flex-col gap-3">
         <button
-          onClick={() => setShowCreateForm(!showCreateForm)}
-          className={showCreateForm ? styles.buttonSecondary : styles.buttonPrimary}
+          onClick={() => {setShowCreateForm(!showCreateForm); setShowLogin(false); resetVariables()}}
+          className={showLogin || showCreateForm ? styles.buttonSecondary : styles.buttonPrimary}
         >
           Skapa användare
         </button>
@@ -63,34 +60,23 @@ function SelectUserStep() {
           <CreateUserForm
             name={name} setName={setName}
             email={email} setEmail={setEmail}
+            password={password} setPassword={setPassword}
             onSubmit={createNewUser}
           />
         )}
 
         <button 
-            onClick={() => { setShowJoinForn(!showJoinForm); setShowCreateForm(false)}}
+            onClick={() => { setShowLogin(!showLogin); setShowCreateForm(false); resetVariables()}}
             className={styles.buttonSecondary}>
-          Välj användare
+          Inloggning
         </button>
 
-        {showJoinForm && (
-            existingUsers.length === 0 ? (
-                <p className={styles.cardSubtitle}>Inga användare att välja mellan</p>
-            ) : (
-                <form onSubmit={selectExistingUser} className="flex flex-col gap-2 -mt-1">
-                    <SelectDropdown
-                        items={existingUsers}
-                        value={selectedUserId}
-                        onChange={setSelectedUserId}
-                        placeholder="Välj användare"
-                        getLabel={(user) => user.name}
-                        getValue={(user) => user.id}
-                    />
-                    <button type="submit" className={styles.buttonPrimary}>
-                        Bekräfta
-                    </button>
-                </form>
-            )
+        {showLogin && (
+            <Login
+                email={email} setEmail={setEmail}
+                password={password} setPassword={setPassword}
+                onSubmit={handleLogin}
+            />
         )}
       </nav>
     </div>
