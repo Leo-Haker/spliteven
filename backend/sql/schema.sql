@@ -31,7 +31,7 @@ CREATE TABLE account_person (
 CREATE TABLE membership_request (
     id BIGSERIAL PRIMARY KEY,
     account_id BIGINT NOT NULL REFERENCES account(id),
-    person_id BIGINT NOT NULL REFERENCES person(id).
+    person_id BIGINT NOT NULL REFERENCES person(id),
     status VARCHAR(20) NOT NULL DEFAULT 'PENDING',
     created_at TIMESTAMP NOT NULL DEFAULT now()
 )

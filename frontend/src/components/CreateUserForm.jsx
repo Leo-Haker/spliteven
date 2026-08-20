@@ -1,6 +1,6 @@
 import { styles } from "../utils/styles"
 
-function CreateUserForm({ name, setName, email, setEmail, onSubmit }) {
+function CreateUserForm({ name, setName, email, setEmail,password, setPassword, onSubmit }) {
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-2 -mt-1">
       <input
@@ -19,6 +19,15 @@ function CreateUserForm({ name, setName, email, setEmail, onSubmit }) {
         className={styles.input}
         required
       />
+      <input
+      type="password"
+      placeholder="Lösenord"
+      value={password}
+      onChange={(e) => setPassword(e.target.value)}
+      className={styles.input}
+      required
+      >
+      </input>
       <button
         type="submit"
         className={styles.buttonPrimary}
