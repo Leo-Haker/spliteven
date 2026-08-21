@@ -21,22 +21,17 @@ import jakarta.validation.Valid;
 
 import java.math.BigDecimal;
 import java.time.YearMonth;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/persons")
 public class PersonController {
 
-    private final PersonRepository personRepository;
-    private final ExpenseRepository expenseRepository;
-    private final AccountRepository accountRepository;
     private final PersonService personService;
 
-    public PersonController(PersonRepository personRepository, PersonService personService,
-            ExpenseRepository expenseRepository, AccountRepository accountRepository) {
-        this.personRepository = personRepository;
-        this.expenseRepository = expenseRepository;
-        this.accountRepository = accountRepository;
+    public PersonController(PersonService personService) {
         this.personService = personService;
     }
 
@@ -50,73 +45,37 @@ public class PersonController {
 
     @GetMapping
     public List<PersonDto> getAll() {
-        return personRepository.findAll().stream().map(this::toDto).toList();
-    }
-
-    private PersonDto toDto(Person p) {
-        return new PersonDto(p.getId(), p.getName(), p.getEmail());
+        return personService.getAll()
+                .stream()
+                .map(this::toDto)
+                .toList();
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<PersonDto> rename(@PathVariable Long id, @RequestBody RenameUserRequest request) {
-        Person person = personRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Användare hittades inte"));
-        person.setName(request.name());
-        Person saved = personRepository.save(person);
+        Person saved = personService.rename(id, request.name());
         return ResponseEntity.ok(toDto(saved));
     }
 
     @GetMapping("/by-email")
     public ResponseEntity<PersonDto> getByEmail(@RequestParam String email) {
-        return personRepository.findByEmail(email)
+        return personService.findByEmail(email)
                 .map(p -> ResponseEntity.ok(toDto(p)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/{personId}/accounts")
     public List<AccountDto> getAccountsForPerson(@PathVariable Long personId) {
-        Person person = personRepository.findById(personId)
-                .orElseThrow(() -> new IllegalArgumentException("Person hittades inte"));
-
-        return person.getAccounts().stream().map(this::accountToDto).toList();
+        return personService.getAccountsForPerson(personId)
+                .stream()
+                .map(this::accountToDto)
+                .toList();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
-        Person person = personRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Person hittades inte"));
-
-        checkNotNegativeBalanceOnAccounts(person);
-        removePersonFromTheirAccounts(person);
-
-        personRepository.delete(person);
+        personService.deletePerson(id);
         return ResponseEntity.noContent().build();
-
-    }
-
-    private void checkNotNegativeBalanceOnAccounts(Person person) {
-        for (Account account : person.getAccounts()) {
-            List<Expense> expenses = expenseRepository.findByAccountId(account.getId());
-            BalanceCalculator calculator = new BalanceCalculator(account);
-            YearMonth earliestDate = expenses.stream()
-                    .map(e -> YearMonth.from(e.getDate()))
-                    .min(YearMonth::compareTo)
-                    .orElse(YearMonth.now());
-            YearMonth latestDate = YearMonth.now();
-
-            BigDecimal balance = calculator.calculateBalanceForPerson(person, expenses, earliestDate, latestDate);
-
-            if (balance.compareTo(BigDecimal.ZERO) < 0) {
-                throw new IllegalStateException(
-                        "Kan inte ta bort användaren - skulder finns kvar i kontot \"" + account.getName() + "\"");
-            }
-        }
-    }
-
-    private void removePersonFromTheirAccounts(Person person) {
-        for (Account account : List.copyOf(person.getAccounts())) {
-            account.removePerson(person);
-        }
     }
 
     @GetMapping("/{personId}/balances")
@@ -125,26 +84,31 @@ public class PersonController {
             @RequestParam String from, // format: "2026-07"
             @RequestParam String to) {
 
-        Person person = personRepository.findById(personId)
-                .orElseThrow(() -> new IllegalArgumentException("Person hittades inte"));
+        Map<Account, BigDecimal> balances = personService.getBalancesForPerson(personId, YearMonth.parse(from),
+                YearMonth.parse(to));
 
-        YearMonth fromMonth = YearMonth.parse(from);
-        YearMonth toMonth = YearMonth.parse(to);
-
-        return person.getAccounts().stream().map(account -> {
-            List<Expense> expenses = expenseRepository.findByAccountId(account.getId());
-
-            BalanceCalculator calculator = new BalanceCalculator(account);
-            BigDecimal balance = calculator.calculateBalanceForPerson(person, expenses, fromMonth, toMonth);
-            return new AccountBalanceDto(account.getId(), account.getName(), balance);
-        }).toList();
+        return toListOfAccountBalanceDtos(balances);
     }
 
-    private AccountDto accountToDto(Account a) {
-        List<PersonDto> members = a.getPersons().stream()
-                .map(p -> new PersonDto(p.getId(), p.getName(), p.getEmail()))
+    private List<AccountBalanceDto> toListOfAccountBalanceDtos(Map<Account, BigDecimal> balances) {
+        return balances.entrySet()
+                .stream()
+                .map((entry) -> {
+                    Account account = entry.getKey();
+                    BigDecimal balance = entry.getValue();
+
+                    return new AccountBalanceDto(account.getId(), account.getName(), balance);
+                })
                 .toList();
-        return new AccountDto(a.getId(), a.getName(), members);
+    }
+
+    private AccountDto accountToDto(Account account) {
+        List<PersonDto> persons = account.getPersons().stream().map(this::toDto).toList();
+        return new AccountDto(account.getId(), account.getName(), persons);
+    }
+
+    private PersonDto toDto(Person p) {
+        return new PersonDto(p.getId(), p.getName(), p.getEmail());
     }
 
 }
