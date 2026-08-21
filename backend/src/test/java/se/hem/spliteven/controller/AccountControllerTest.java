@@ -44,7 +44,7 @@ class AccountControllerTest extends AbstractControllerTest {
                 .andReturn().getResponse().getContentAsString();
         Long accountId = objectMapper.readTree(accountResponse).get("id").asLong();
 
-        mockMvc.perform(post("/api/accounts/{accountId}/members/{personId}", accountId, newMemberId))
+        addUserToAccount(accountId, newMemberId)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.members.length()").value(2));
     }
@@ -53,16 +53,9 @@ class AccountControllerTest extends AbstractControllerTest {
     void removeMember_removesPersonFromAccount() throws Exception {
         Long creatorId = createTestPerson("Kvar", "kvar@test.com");
         Long toRemoveId = createTestPerson("Tas Bort", "borttagen@test.com");
+        Long accountId = createTestAccount("Konto", creatorId);
 
-        String accountResponse = mockMvc.perform(post("/api/accounts")
-                .contentType("application/json")
-                .content("""
-                        {"name":"Konto","personId":%d}
-                        """.formatted(creatorId)))
-                .andReturn().getResponse().getContentAsString();
-        Long accountId = objectMapper.readTree(accountResponse).get("id").asLong();
-
-        mockMvc.perform(post("/api/accounts/{accountId}/members/{personId}", accountId, toRemoveId));
+        addUserToAccount(accountId, toRemoveId);
 
         mockMvc.perform(delete("/api/accounts/{accountId}/members/{personId}", accountId, toRemoveId))
                 .andExpect(status().isOk())
@@ -72,14 +65,7 @@ class AccountControllerTest extends AbstractControllerTest {
     @Test
     void rename_updatesAccountName() throws Exception {
         Long personId = createTestPerson("Namnbytare", "namn@test.com");
-
-        String accountResponse = mockMvc.perform(post("/api/accounts")
-                .contentType("application/json")
-                .content("""
-                        {"name":"Gammalt namn","personId":%d}
-                        """.formatted(personId)))
-                .andReturn().getResponse().getContentAsString();
-        Long accountId = objectMapper.readTree(accountResponse).get("id").asLong();
+        Long accountId = createTestAccount("Gammalt namn", personId);
 
         mockMvc.perform(put("/api/accounts/{id}", accountId)
                 .contentType("application/json")
@@ -93,12 +79,7 @@ class AccountControllerTest extends AbstractControllerTest {
     @Test
     void getAccountsForPerson_returnsAccountsPersonIsMemberOf() throws Exception {
         Long personId = createTestPerson("Medlem", "medlem@test.com");
-
-        mockMvc.perform(post("/api/accounts")
-                .contentType("application/json")
-                .content("""
-                        {"name":"Mitt konto", "personId":%d}
-                        """.formatted(personId)));
+        createTestAccount("Mitt konto", personId);
 
         mockMvc.perform(get("/api/persons/{personId}/accounts", personId))
                 .andExpect(status().isOk())

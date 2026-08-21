@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import static org.mockito.Mockito.atMost;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -28,7 +29,22 @@ class ExpenseControllerTest extends AbstractControllerTest {
         makeExpense(accountId, personId, amount, LocalDate.now())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.amount").value(amount))
+                .andExpect(jsonPath("$.income").value(false))
                 .andExpect(jsonPath("$.paidByName").value("Betalare"));
+    }
+
+    @Test
+    void createIncome_savesAndReturnsExpense() throws Exception {
+        Long personId = createTestPerson("Betalare1", "betalar1@test.com");
+        Long accountId = createTestAccount("Inkomstkonto", personId);
+        int amount = 250;
+
+        makeIncome(accountId, personId, amount, LocalDate.now())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.amount").value(amount))
+                .andExpect(jsonPath("$.income").value(true))
+                .andExpect(jsonPath("$.paidByName").value("Betalare1"));
+
     }
 
     @Test

@@ -88,11 +88,11 @@ public class MembershipRequestControllerTest extends AbstractControllerTest {
         mockMvc.perform(post("/api/requests/{id}/accept", requestId))
                 .andExpect(status().isOk());
 
-        // Bekräfta att personen nu faktiskt är medlem i kontot
+        // Confirms that the user is now a member
         mockMvc.perform(get("/api/accounts/{id}", accountId))
                 .andExpect(jsonPath("$.members.length()").value(2));
 
-        // Bekräfta att förfrågan inte längre är pending
+        // Confirms the request is no longer pending
         mockMvc.perform(get("/api/requests/{personId}/requests", invitedId))
                 .andExpect(jsonPath("$.length()").value(0));
     }
@@ -102,17 +102,16 @@ public class MembershipRequestControllerTest extends AbstractControllerTest {
         Long creatorId = createTestPerson("Skapare5", "skapare5@test.com");
         Long accountId = createTestAccount("Konto5", creatorId);
         Long invitedId = createTestPerson("Inbjuden5", "inbjuden5@test.com");
-
         Long requestId = createTestRequest(accountId, "inbjuden5@test.com");
 
         mockMvc.perform(post("/api/requests/{id}/decline", requestId))
                 .andExpect(status().isOk());
 
-        // Personen ska INTE ha lagts till i kontot
+        // User is NOT added to the account
         mockMvc.perform(get("/api/accounts/{id}", accountId))
                 .andExpect(jsonPath("$.members.length()").value(1));
 
-        // Förfrågan är inte längre pending
+        // Request is no longer pending
         mockMvc.perform(get("/api/requests/{personId}/requests", invitedId))
                 .andExpect(jsonPath("$.length()").value(0));
     }

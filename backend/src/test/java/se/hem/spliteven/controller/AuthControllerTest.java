@@ -43,8 +43,6 @@ public class AuthControllerTest extends AbstractControllerTest {
                         {"email":"person2@test.com","password":"feltlosenord"}
                         """))
                 .andExpect(status().is4xxClientError());
-        // Notera: exakt statuskod (400 vs 404) beror på om ni byggt en
-        // @ExceptionHandler för IllegalArgumentException, se tidigare diskussion
     }
 
     @Test
