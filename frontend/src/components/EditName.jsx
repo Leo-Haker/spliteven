@@ -1,14 +1,17 @@
-import { useState } from "react"
-import { renameAccount } from "../utils/api.js"
+import { useState, useEffect } from "react"
 
-function EditableAccountName({ account, onRenamed }) {
+function EditName({ entity, onRenamed,  rename }) {
   const [editing, setEditing] = useState(false)
-  const [name, setName] = useState(account.name)
+  const [name, setName] = useState(entity?.name ?? "")
   const [error, setError] = useState(null)
+
+  useEffect(() => {
+    setName(entity?.name ?? "")
+  }, [entity])
 
   async function save() {
     try {
-      const updated = await renameAccount(account.id, name)
+      const updated = await rename(entity.id, name)
       onRenamed(updated)
       setEditing(false)
     } catch (err) {
@@ -19,7 +22,7 @@ function EditableAccountName({ account, onRenamed }) {
   if (!editing) {
     return (
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-semibold text-slate-800">{account.name}</h1>
+        <h1 className="text-2xl font-semibold text-slate-800">{name}</h1>
         <button onClick={() => setEditing(true)} className="text-sm text-slate-500 hover:underline">
           Byt namn
         </button>
@@ -42,4 +45,4 @@ function EditableAccountName({ account, onRenamed }) {
   )
 }
 
-export default EditableAccountName
+export default EditName

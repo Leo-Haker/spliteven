@@ -9,6 +9,7 @@ import Register from "./Register.jsx"
 import Expense from "./Expense.jsx"
 import Balance from "./Balance.jsx"
 import ManageAccount from './ManageAccount.jsx'
+import ManageUser from "./ManageUser.jsx"
 
 createRoot(document.getElementById('root')).render(
     <StrictMode>
@@ -20,6 +21,7 @@ createRoot(document.getElementById('root')).render(
                     <Route path={ROUTES.EXPENSES} element={<Expense />} />
                     <Route path={ROUTES.BALANCE} element={<Balance />} />
                     <Route path={ROUTES.MANAGE_ACCOUNT} element={<ManageAccount />} />
+                    <Route path={ROUTES.MANGAGE_USER} element={<ManageUser/>} />
                 </Routes>
             </BrowserRouter>
         </SessionProvider>

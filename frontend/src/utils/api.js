@@ -20,6 +20,28 @@ export async function login(email, password) {
         return res.json()
 }
 
+export async function renameUser(personId, name) {
+    const res = await fetch(`${API_BASE}/persons/${personId}`, {
+        method: "PUT",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({personId, name})
+    })
+
+    if(!res.ok) throw new Error("Kunde inte byta namn")
+    return res.json()
+}
+
+export async function deleteUser(id) {
+    const res = await fetch(`${API_BASE}/persons/${id}`, {
+        method: "DELETE"
+    })
+    if (!res.ok) {
+        const message = await res.text()
+        throw new Error(message || "Kunde inte ta bort användaren")
+    }
+    return res.json()
+}
+
 
 
 export async function createAccount(name, personId) {

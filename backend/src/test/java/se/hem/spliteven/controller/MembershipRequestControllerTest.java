@@ -40,25 +40,18 @@ public class MembershipRequestControllerTest extends AbstractControllerTest {
                 .andExpect(jsonPath("$.status").value("PENDING"));
     }
 
-    /*
-     * @Test
-     * void create_withUnknownEmail_returnsError() throws Exception {
-     * Long creatorId = createTestPerson("Skapare", "skapare2@test.com");
-     * Long accountId = createTestAccount("Konto", creatorId);
-     * 
-     * mockMvc.perform(post("/api/accounts/{accountId}/requests", accountId)
-     * .contentType("application/json")
-     * .content("""
-     * {"email":"finns-inte@test.com"}
-     * """))
-     * .andExpect(status().is5xxServerError());
-     * // Notera: ett 500-fel här är inte idealiskt REST-beteende (borde vara
-     * 404/400),
-     * // men matchar hur controllern faktiskt beter sig just nu (kastar
-     * // IllegalArgumentException
-     * // utan en @ExceptionHandler). Värt att förbättra senare.
-     * }
-     */
+    @Test
+    void create_withUnknownEmail_returnsError() throws Exception {
+        Long creatorId = createTestPerson("Skapare", "skapare2@test.com");
+        Long accountId = createTestAccount("Konto", creatorId);
+
+        mockMvc.perform(post("/api/accounts/{accountId}/requests", accountId)
+                .contentType("application/json")
+                .content("""
+                        {"email":"finns-inte@test.com"}
+                        """))
+                .andExpect(status().isNotFound());
+    }
 
     @Test
     void getPending_returnsOnlyPendingRequestsForThatPerson() throws Exception {

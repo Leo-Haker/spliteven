@@ -5,10 +5,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -58,5 +62,29 @@ public abstract class AbstractControllerTest {
                 .andReturn().getResponse().getContentAsString();
         return objectMapper.readTree(before).size();
 
+    }
+
+    protected ResultActions addUserToAccount(Long accountId, Long userId) throws Exception {
+        return mockMvc.perform(post("/api/accounts/{accountId}/members/{personId}", accountId, userId));
+    }
+
+    protected ResultActions makeExpense(Long accountId, Long userId, int amount, LocalDate date) throws Exception {
+        return mockMvc.perform(post("/api/expense")
+                .contentType("application/json")
+                .content("""
+                        {"accountId":%d, "paidById":%d, "income":false,
+                         "description":"info","amount":%d,"date":"%s"
+                        }
+                        """.formatted(accountId, userId, amount, date)));
+    }
+
+    protected ResultActions makeIncome(Long accountId, Long userId, int amount, LocalDate date) throws Exception {
+        return mockMvc.perform(post("/api/expense")
+                .contentType("application/json")
+                .content("""
+                        {"accountId":%d, "paidById":%d, "income":true,
+                         "description":"info","amount":%d,"date":"%s"
+                        }
+                        """.formatted(accountId, userId, amount, date)));
     }
 }

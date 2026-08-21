@@ -1,41 +1,53 @@
 import { useState, useEffect } from "react"
 import Navbar from "../components/Navbar.jsx"
 import Table from "../components/Table.jsx"
-import EditableAccountName from "../components/EditName.jsx"
-import AddMemberForm from "../components/AddMemberForm.jsx"
-import SelectAccountStep from "../components/SelectAccountStep.jsx.jsx"
+import EditName from "../components/EditName.jsx"
+import DeleteUserForm from "../components/DeleteUserForm.jsx"
+import SelectAccountStep from "../components/SelectAccountStep.jsx"
+import SelectUserStep from "../components/SelectUserStep.jsx"
 import { useSession } from "../context/SessionContext.jsx"
-import { getAccount, removeMember, renameAccount } from "../utils/api.js"
+import { getAccountsForPerson, removeMember, renameUser} from "../utils/api.js"
 import  { styles } from "../utils/styles.js"
 
-function ManageAccountPage() {
-  const { currentAccount, setCurrentAccount } = useSession()
-  const [members, setMembers] = useState([])
+function ManageUser() {
+  const { currentUser, currentAccount, setCurrentUser } = useSession()
+  const [accounts, setAccounts] = useState([])
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    if (!currentAccount) return
-    refreshAccount()
-  }, [currentAccount?.id])
+    if (!currentUser) return
+    refreshAccounts()
+}, [currentUser?.id])
 
-  function refreshAccount() {
-    getAccount(currentAccount.id)
-      .then((account) => {
-        setMembers(account.members)
-        setCurrentAccount(account)
-      })
-      .catch((err) => setError(err.message))
+  function refreshAccounts() {
+    getAccountsForPerson(currentUser.id)
+        .then(setAccounts)
+        .catch((err) => setError(err.message))
   }
 
-  async function handleRemove(personId) {
+  async function handleRemove(accountId) {
     try {
-      await removeMember(currentAccount.id, personId)
-      refreshAccount()
+      await removeMember(accountId, currentUser.id)
+      refreshAccounts()
     } catch (err) {
       setError(err.message)
     }
   }
 
+  //If the user deletes itself, get back att Select user.
+  if (!currentUser) {
+    return  (
+      <div>
+        <Navbar />
+        <div className={styles.buttonMenuCenter}>
+            <SelectUserStep/>
+        </div>
+        
+      </div>
+    )
+  }
+
+  //If the user deletes the current account, get to select account
   if (!currentAccount) {
     return (
       <div>
@@ -54,14 +66,13 @@ function ManageAccountPage() {
           <Navbar />
       <div className={styles.buttonMenuCenter}>
         <div className="bg-white rounded-2xl shadow-md p-8 w-full max-w-lg">
-          <EditableAccountName entity={currentAccount} onRenamed={setCurrentAccount} rename={renameAccount} />
+          <EditName entity={currentUser} onRenamed={setCurrentUser} rename={renameUser} />
 
           {error && <p className="text-red-600 text-sm my-2">{error}</p>}
 
           <Table
             columns={[
               { key: "name", header: "Namn" },
-              { key: "email", header: "E-post" },
               {
                 key: "actions",
                 header: "",
@@ -75,17 +86,13 @@ function ManageAccountPage() {
                 ),
               },
             ]}
-            data={members}
-            emptyMessage="Inga medlemmar än"
+            data={accounts}
+            emptyMessage="Inga konton än"
           />
-
-          <div className="mt-4">
-            <AddMemberForm accountId={currentAccount.id} onSent={refreshAccount} />
-          </div>
         </div>
       </div>
     </div>
   )
 }
 
-export default ManageAccountPage
+export default ManageUser

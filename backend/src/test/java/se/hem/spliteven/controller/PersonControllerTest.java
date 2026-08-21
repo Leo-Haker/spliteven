@@ -9,6 +9,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import java.time.LocalDate;
+
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
@@ -49,5 +52,26 @@ class PersonControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(before + 1))
                 .andExpect(jsonPath("[?(@.name == 'Person')]").exists());
+    }
+
+    @Test
+    void delete_withNoDebts_removesPerson() throws Exception {
+        Long personId = createTestPerson("Skuldfri", "skuldfri@test.com");
+
+        mockMvc.perform(delete("/api/persons/{id}", personId))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void delete_withDebts_returnConflict() throws Exception {
+        Long creatorId = createTestPerson("Skuldberg", "skuldberg@test.com");
+        Long accountId = createTestAccount("Skuldkonto1", creatorId);
+        Long debtorId = createTestPerson("Gäldenär", "gäldenär@test.com");
+
+        addUserToAccount(accountId, debtorId);
+        makeExpense(accountId, debtorId, 1000, LocalDate.now());
+
+        mockMvc.perform(delete("/api/persons/{id}", creatorId))
+                .andExpect(status().isConflict());
     }
 }

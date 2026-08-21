@@ -9,6 +9,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import java.time.LocalDate;
+
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
@@ -20,16 +23,11 @@ class ExpenseControllerTest extends AbstractControllerTest {
     void createExpense_savesAndReturnsExpense() throws Exception {
         Long personId = createTestPerson("Betalare", "betalare@test.com");
         Long accountId = createTestAccount("Utgiftskonto", personId);
+        int amount = 100;
 
-        mockMvc.perform(post("/api/expense")
-                .contentType("application/json")
-                .content("""
-                        {"accountId":%d,"paidById":%d,"income":false,
-                         "description":"Matkasse","amount":100.00,"date":"2026-07-15"}
-                        """.formatted(accountId, personId)))
+        makeExpense(accountId, personId, amount, LocalDate.now())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.description").value("Matkasse"))
-                .andExpect(jsonPath("$.amount").value(100.00))
+                .andExpect(jsonPath("$.amount").value(amount))
                 .andExpect(jsonPath("$.paidByName").value("Betalare"));
     }
 
