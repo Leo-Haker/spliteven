@@ -31,12 +31,20 @@ SplitEven is a web application for sharing expenses and tracking balances betwee
    cd ..
    ```
 
-3. Create a PostgreSQL database named `spliteven` and apply `backend/sql/schema.sql`.
+3. Create your local environment file from the committed template:
 
-4. Configure the database settings in `backend/src/main/resources/application.properties`.
+   ```bash
+   cp .env.example .env
+   ```
+
+   Replace the placeholder mail values in `.env`. The `.env` file is ignored by Git.
+
+4. Create a PostgreSQL database named `spliteven` and apply `backend/sql/schema.sql`.
+
+5. Configure the database settings in `backend/src/main/resources/application.properties`.
    The application uses `ddl-auto=validate`, so the schema must already exist.
 
-5. Configure mail credentials through the `MAIL_USERNAME` and `MAIL_PASSWORD` environment variables when invitation emails are needed.
+6. The mail credentials from `.env` are loaded automatically when using `npm run dev` from the project root. When running the backend directly, export them in the shell first if invitation emails are needed.
 
 ## Run the application
 
