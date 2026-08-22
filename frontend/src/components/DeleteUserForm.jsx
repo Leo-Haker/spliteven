@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { removeMember } from "../utils/api.js"
-import { useSession } from "../context/SessionContext.jsx"
+import { useSession } from "../context/useSession.js"
 
 function DeleteUserForm({ onSent }) {
   const [error, setError] = useState(null)

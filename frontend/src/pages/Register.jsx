@@ -2,33 +2,30 @@ import Navbar from '../components/Navbar.jsx'
 import Frontpage from './Frontpage.jsx';
 import AddExpenseForm from '../components/AddExpenseForm.jsx';
 import Table from '../components/Table.jsx';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { getExpensesForAccount } from '../utils/api.js';
-import { useSession } from '../context/SessionContext.jsx'
-
- function currentYearMonth(){
-    const now = new Date()
-    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`
-    }
+import { useSession } from '../context/useSession.js'
 
 function Register() {
     const { currentUser, currentAccount } = useSession();
     const [error, setError] = useState("")
     const [expenses, setExpenses] = useState([])
+    const currentUserId = currentUser?.id
+    const currentAccountId = currentAccount?.id
 
-    function loadMyExpenses() {
-        getExpensesForAccount(currentAccount.id)
+    const loadMyExpenses = useCallback(() => {
+        if (!currentUserId || !currentAccountId) return
+        getExpensesForAccount(currentAccountId)
             .then((data) => {
-                const myExpenses = data.filter((e) => e.paidById === currentUser.id)
+                const myExpenses = data.filter((e) => e.paidById === currentUserId)
                 setExpenses(myExpenses)
             })
             .catch((err) => setError(err.message))
-      }
+    }, [currentAccountId, currentUserId])
 
     useEffect(() => {
-        if (!currentUser) return
         loadMyExpenses()
-    }, [currentAccount, currentUser])
+    }, [loadMyExpenses])
 
     function handleExpenseAdded() {
         loadMyExpenses()

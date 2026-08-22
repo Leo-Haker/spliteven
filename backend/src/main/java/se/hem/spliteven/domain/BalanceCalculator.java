@@ -44,6 +44,8 @@ public class BalanceCalculator {
                 throw new IllegalStateException("Expense payer is not a member of the account.");
             }
 
+            // Positive means the member should receive money; negative means they owe
+            // money.
             addToBalance(balances, paidBy, expense.getOwnAmount());
 
             for (Person person : account.getPersons()) {
@@ -60,7 +62,8 @@ public class BalanceCalculator {
         return !expenseMonth.isBefore(from) && !expenseMonth.isAfter(to);
     }
 
-    // Hjälpmetod: en enda persons totala saldo i kontot, för balansöversikten
+    // Helper method: calculate one person's total account balance for the balance
+    // overview.
     public BigDecimal calculateBalanceForPerson(Person person, List<Expense> expenses, YearMonth from, YearMonth to) {
         Map<Person, BigDecimal> balances = calculateBalances(expenses, from, to);
         return balances.getOrDefault(person, BigDecimal.ZERO);

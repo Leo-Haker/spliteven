@@ -1,6 +1,5 @@
-import { createContext, useContext, useState, useEffect } from 'react'
-
-const SessionContext = createContext(null)
+import { useState, useEffect } from 'react'
+import { SessionContext } from './SessionContextValue.js'
 
 function loadFromStorage(key){
     const stored = localStorage.getItem(key)
@@ -46,8 +45,4 @@ export function SessionProvider({ children }) {
       {children}
     </SessionContext.Provider>
   )
-}
-
-export function useSession() {
-  return useContext(SessionContext)
 }

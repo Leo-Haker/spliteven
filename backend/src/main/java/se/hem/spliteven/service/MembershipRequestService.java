@@ -70,6 +70,8 @@ public class MembershipRequestService extends AbstractService {
         try {
             sendMembershipInvite(email, account.getName());
         } catch (Exception e) {
+            // Persist the invitation even when the mail provider is temporarily
+            // unavailable.
             System.err.println("Kunde inte skicka e-post: " + e.getMessage());
         }
         return membershipRequestRepository.save(membershipRequest);
@@ -83,6 +85,8 @@ public class MembershipRequestService extends AbstractService {
         MembershipRequest request = findRequestById(requestId);
         Account account = request.getAccount();
         Person person = request.getPerson();
+        // Update the account before marking the request accepted so both states stay
+        // consistent.
         account.addPerson(person);
         accountRepository.save(account);
 

@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react"
-import { useSession } from "../context/SessionContext"
+import { useState, useEffect, useCallback } from "react"
+import { useSession } from "../context/useSession.js"
 import { getPendingRequests, acceptRequest, declineRequest } from "../utils/api"
 
 function RequestMenu(){
@@ -7,16 +7,16 @@ function RequestMenu(){
     const [open, setOpen] =useState(false)
     const [requests, setRequests] = useState([])
 
-    function loadRequests(){
+    const loadRequests = useCallback(() => {
         if(!currentUser) return
         getPendingRequests(currentUser.id)
             .then(setRequests)
             .catch((err) => console.error("Kunde inte hämta förfrågningar:", err))
-    }
+    }, [currentUser])
 
     useEffect(() => {
         loadRequests()
-    }, [currentUser])
+    }, [loadRequests])
 
     async function handleAccept(id) {
         try {

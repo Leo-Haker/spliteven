@@ -1,7 +1,8 @@
 import Navbar from "../components/Navbar.jsx"
 import Table from "../components/Table.jsx"
+import Frontpage from "./Frontpage.jsx"
 import { useState, useEffect } from "react"
-import { useSession } from "../context/SessionContext.jsx"
+import { useSession } from "../context/useSession.js"
 import { getExpensesForAccount } from "../utils/api.js"
 
 function Expense() {

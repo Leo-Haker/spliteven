@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react"
-import { useSession } from "../context/SessionContext.jsx"
+import { useState } from "react"
+import { useSession } from "../context/useSession.js"
 import { styles } from "../utils/styles.js"
 import { createPerson, login } from "../utils/api.js"
 import CreateUserForm from "./CreateUserForm.jsx"

@@ -1,12 +1,10 @@
-import { useState, useEffect } from "react"
-import { useSession } from "../context/SessionContext.jsx"
-import { getAccountsForPerson, createExpense } from "../utils/api.js"
+import { useState } from "react"
+import { useSession } from "../context/useSession.js"
+import {  createExpense } from "../utils/api.js"
 import { styles } from "../utils/styles.js"
 
 function AddExpenseForm({ onAdded }) {
   const { currentAccount, currentUser } = useSession()
-  const [accountId, setAccountId] = useState(currentAccount?.id ?? "")
-  const [accounts, setAccounts] = useState([])
   const [description, setDescription] = useState("")
   const [amount, setAmount] = useState("")
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10))

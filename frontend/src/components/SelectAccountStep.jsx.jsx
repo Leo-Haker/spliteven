@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { styles } from "../utils/styles.js"
 import CreateAccountForm from "./CreateAccountForm.jsx"
 import { createAccount, getAccountsForPerson } from "../utils/api.js"
-import { useSession } from "../context/SessionContext.jsx"
+import { useSession } from "../context/useSession.js"
 import SelectDropdown from "./SelectDropdown.jsx"
 
 

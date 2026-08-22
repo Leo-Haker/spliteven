@@ -92,6 +92,8 @@ public class PersonService extends AbstractService {
         for (Account account : person.getAccounts()) {
             List<Expense> expenses = expenseRepository.findByAccountId(account.getId());
             BalanceCalculator calculator = new BalanceCalculator(account);
+            // A member can only be removed after settling debts from the complete expense
+            // history.
             YearMonth earliestDate = expenses.stream()
                     .map(e -> YearMonth.from(e.getDate()))
                     .min(YearMonth::compareTo)

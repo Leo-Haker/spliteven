@@ -1,16 +1,49 @@
-# React + Vite
+# SplitEven frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The frontend is a React application built with Vite. It provides the user interface for profiles, shared accounts, expenses, invitations, and balance overviews.
 
-Currently, two official plugins are available:
+## Structure
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- `src/pages/` - page-level views used by the router
+- `src/components/` - reusable forms, menus, tables, and navigation
+- `src/context/` - shared session state and the `useSession` hook
+- `src/utils/api.js` - functions for calling the backend API
+- `src/utils/routes.js` - application route definitions
+- `src/index.css` - global styles and Tailwind CSS setup
+- `public/` - static public assets
 
-## React Compiler
+## Requirements
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Node.js and npm
+- A running SplitEven backend at `http://localhost:8080`
 
-## Expanding the ESLint configuration
+## Install
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+npm install
+```
+
+## Run in development
+
+```bash
+npm run dev
+```
+
+The development server runs at `http://localhost:5173`.
+
+## Validate and build
+
+```bash
+npm run lint
+npm run build
+```
+
+Preview the production build locally with:
+
+```bash
+npm run preview
+```
+
+## Backend API
+
+The API base URL is currently defined in `src/utils/api.js`. Start the backend separately, or run `npm run dev` from the project root to start both services together.

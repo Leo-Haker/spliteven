@@ -3,7 +3,7 @@ import { ROUTES } from "../utils/routes.js"
 import { styles } from "../utils/styles.js"
 import UserMenu from "./UserMenu.jsx"
 import RequestMenu from "./RequestsMenu.jsx"
-import { useSession } from "../context/SessionContext.jsx"
+import { useSession } from "../context/useSession.js"
 
 function linkStyle({isActive}){
     return isActive

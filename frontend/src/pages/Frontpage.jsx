@@ -1,4 +1,4 @@
-import { useSession } from "../context/SessionContext.jsx"
+import { useSession } from "../context/useSession.js"
 import Navbar from "../components/Navbar.jsx"
 import SelectUserStep from "../components/SelectUserStep.jsx"
 import SelectAccountStep from "../components/SelectAccountStep.jsx"

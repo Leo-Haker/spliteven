@@ -2,7 +2,8 @@ import { useState, useEffect } from "react"
 import Navbar from "../components/Navbar.jsx"
 import Table from "../components/Table.jsx"
 import IntervalPicker from "../components/IntervalPicker.jsx"
-import { useSession } from "../context/SessionContext.jsx"
+import Frontpage from "./Frontpage.jsx"
+import { useSession } from "../context/useSession.js"
 import { getBalances } from "../utils/api.js"
 
 function currentYearMonth(){

@@ -100,6 +100,7 @@ public class Expense {
     }
 
     public BigDecimal getOwnAmount() {
+        // The payer's own share is excluded from what they receive or owe.
         BigDecimal percetage = BigDecimal.valueOf(ownSharePercentage).divide(BigDecimal.valueOf(100), 4,
                 RoundingMode.HALF_UP);
         BigDecimal ownShare = amount.multiply(percetage);
@@ -128,6 +129,7 @@ public class Expense {
     }
 
     public BigDecimal getSharePerOtherMember() {
+        // Distribute the share not paid by the payer evenly among all other members.
         BigDecimal numberOfOtherPersons = BigDecimal.valueOf(account.numberOfMembers() - 1);
         BigDecimal otherShare = BigDecimal.valueOf(100 - ownSharePercentage)
                 .divide(BigDecimal.valueOf(100), 4, RoundingMode.HALF_UP)

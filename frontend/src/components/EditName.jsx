@@ -1,13 +1,9 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
 
 function EditName({ entity, onRenamed,  rename }) {
   const [editing, setEditing] = useState(false)
   const [name, setName] = useState(entity?.name ?? "")
   const [error, setError] = useState(null)
-
-  useEffect(() => {
-    setName(entity?.name ?? "")
-  }, [entity])
 
   async function save() {
     try {

@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import Navbar from "../components/Navbar.jsx"
 import Table from "../components/Table.jsx"
 import EditableAccountName from "../components/EditName.jsx"
 import AddMemberForm from "../components/AddMemberForm.jsx"
 import SelectAccountStep from "../components/SelectAccountStep.jsx.jsx"
-import { useSession } from "../context/SessionContext.jsx"
+import { useSession } from "../context/useSession.js"
 import { getAccount, removeMember, renameAccount } from "../utils/api.js"
 import  { styles } from "../utils/styles.js"
 
@@ -12,20 +12,21 @@ function ManageAccountPage() {
   const { currentAccount, setCurrentAccount } = useSession()
   const [members, setMembers] = useState([])
   const [error, setError] = useState(null)
+  const currentAccountId = currentAccount?.id
 
-  useEffect(() => {
-    if (!currentAccount) return
-    refreshAccount()
-  }, [currentAccount?.id])
-
-  function refreshAccount() {
-    getAccount(currentAccount.id)
+  const refreshAccount = useCallback(() => {
+    if (!currentAccountId) return
+    getAccount(currentAccountId)
       .then((account) => {
         setMembers(account.members)
         setCurrentAccount(account)
       })
       .catch((err) => setError(err.message))
-  }
+  }, [currentAccountId, setCurrentAccount])
+
+  useEffect(() => {
+    refreshAccount()
+  }, [refreshAccount])
 
   async function handleRemove(personId) {
     try {
@@ -54,7 +55,7 @@ function ManageAccountPage() {
           <Navbar />
       <div className={styles.buttonMenuCenter}>
         <div className="bg-white rounded-2xl shadow-md p-8 w-full max-w-lg">
-          <EditableAccountName entity={currentAccount} onRenamed={setCurrentAccount} rename={renameAccount} />
+          <EditableAccountName key={currentAccount.id} entity={currentAccount} onRenamed={setCurrentAccount} rename={renameAccount} />
 
           {error && <p className="text-red-600 text-sm my-2">{error}</p>}
 

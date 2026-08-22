@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { useSession } from "../context/SessionContext.jsx"
+import { useSession } from "../context/useSession.js"
 import { deleteUser } from "../utils/api.js"
 import { ROUTES } from "../utils/routes.js"
 
