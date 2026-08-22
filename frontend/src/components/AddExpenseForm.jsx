@@ -14,13 +14,7 @@ function AddExpenseForm({ onAdded }) {
   const [filter, setFilter] = useState("expense")
   const income = filter === "income"
 
-  useEffect(() => {
-    if (!currentUser) return
-    getAccountsForPerson(currentUser.id)
-      .then(setAccounts)
-      .catch((err) => setError(err.message))
-  }, [currentUser])
-
+  
   async function handleSubmit(e) {
     e.preventDefault()
     try {

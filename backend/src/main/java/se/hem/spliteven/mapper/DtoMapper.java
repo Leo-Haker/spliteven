@@ -3,9 +3,11 @@ package se.hem.spliteven.mapper;
 import se.hem.spliteven.dto.AccountBalanceDto;
 import se.hem.spliteven.dto.AccountDto;
 import se.hem.spliteven.dto.ExpenseDto;
+import se.hem.spliteven.dto.MembershipRequestDto;
 import se.hem.spliteven.dto.PersonDto;
 import se.hem.spliteven.model.Account;
 import se.hem.spliteven.model.Expense;
+import se.hem.spliteven.model.MembershipRequest;
 import se.hem.spliteven.model.Person;
 
 import java.math.BigDecimal;
@@ -50,4 +52,11 @@ public class DtoMapper {
                 .toList();
     }
 
+    public MembershipRequestDto toDto(MembershipRequest request) {
+        return new MembershipRequestDto(
+                request.getId(),
+                request.getAccount().getId(),
+                request.getAccount().getName(),
+                request.getStatus().name());
+    }
 }

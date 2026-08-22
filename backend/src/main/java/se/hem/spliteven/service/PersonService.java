@@ -25,21 +25,17 @@ import se.hem.spliteven.repository.ExpenseRepository;
 import se.hem.spliteven.repository.PersonRepository;
 
 @Service
-public class PersonService {
+public class PersonService extends AbstractService {
 
-    private final PersonRepository personRepository;
-    private final ExpenseRepository expenseRepository;
-    private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
+    private final String errorLogin = "Fel e-post eller lösenord";
 
     public PersonService(
             PersonRepository personRepository,
             ExpenseRepository expenseRepository,
             AccountRepository accountRepository,
             PasswordEncoder passwordEncoder) {
-        this.personRepository = personRepository;
-        this.expenseRepository = expenseRepository;
-        this.accountRepository = accountRepository;
+        super(expenseRepository, accountRepository, personRepository);
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -52,11 +48,10 @@ public class PersonService {
     }
 
     public Person login(String email, String password) throws IllegalArgumentException {
-        Person person = personRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("Fel e-post eller lösenord"));
+        Person person = findPersonByEmail(email);
 
         if (!passwordEncoder.matches(password, person.getPasswordHash())) {
-            throw new IllegalArgumentException("Fel e-post eller lösenord");
+            throw new IllegalArgumentException(errorLogin);
         }
 
         return person;
@@ -67,12 +62,11 @@ public class PersonService {
     }
 
     public Person getPerson(Long id) {
-        return personRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Person hittades inte"));
+        return findPersonById(id);
     }
 
     public Optional<Person> findByEmail(String email) {
-        return personRepository.findByEmail(email);
+        return findByEmail(email);
     }
 
     public Person rename(Long id, String name) {
@@ -82,14 +76,11 @@ public class PersonService {
     }
 
     public List<Account> getAccountsForPerson(Long personId) {
-        Person person = personRepository.findById(personId)
-                .orElseThrow(() -> new IllegalArgumentException("Person hittades inte"));
-
-        return person.getAccounts();
+        return findPersonById(personId).getAccounts();
     }
 
     public void deletePerson(Long id) {
-        Person person = getPerson(id);
+        Person person = findPersonById(id);
 
         checkNotNegativeBalanceOnAccounts(person);
         removePersonFromTheirAccounts(person);
@@ -125,8 +116,7 @@ public class PersonService {
     // Date format: "2026-07"
     public Map<Account, BigDecimal> getBalancesForPerson(Long personId, YearMonth from, YearMonth to) {
 
-        Person person = personRepository.findById(personId)
-                .orElseThrow(() -> new IllegalArgumentException("Person hittades inte"));
+        Person person = findPersonById(personId);
 
         Map<Account, BigDecimal> balances = new HashMap<>();
 

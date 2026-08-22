@@ -17,36 +17,25 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AccountService {
-
-    private final ExpenseRepository expenseRepository;
-    private final AccountRepository accountRepository;
-    private final PersonRepository personRepository;
-    private String accountNotFound = "Kunde inte hitta konto";
-    private String personNotFound = "Kunde inte hitta person";
+public class AccountService extends AbstractService {
 
     public AccountService(
             ExpenseRepository expenseRepository,
             AccountRepository accountRepository,
             PersonRepository personRepository) {
-        this.expenseRepository = expenseRepository;
-        this.accountRepository = accountRepository;
-        this.personRepository = personRepository;
+        super(expenseRepository, accountRepository, personRepository);
     }
 
     public Account create(String name, Long createrId) {
-        Person creater = personRepository.findById(createrId)
-                .orElseThrow(() -> new IllegalArgumentException(personNotFound));
+        Person creater = findPersonById(createrId);
         Account account = new Account(name);
         account.addPerson(creater);
         return accountRepository.save(account);
     }
 
     public Account addMember(Long accountId, Long personId) {
-        Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new IllegalArgumentException(accountNotFound));
-        Person person = personRepository.findById(personId)
-                .orElseThrow(() -> new IllegalArgumentException(personNotFound));
+        Account account = findAccountById(accountId);
+        Person person = findPersonById(personId);
         account.addPerson(person);
         return accountRepository.save(account);
 
@@ -57,17 +46,14 @@ public class AccountService {
     }
 
     public Account rename(Long id, String name) {
-        Account account = accountRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException(accountNotFound));
+        Account account = findAccountById(id);
         account.setName(name);
         return accountRepository.save(account);
     }
 
     public Account removeMember(Long accountId, Long personId) {
-        Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new IllegalArgumentException(accountNotFound));
-        Person person = personRepository.findById(personId)
-                .orElseThrow(() -> new IllegalArgumentException(personNotFound));
+        Account account = findAccountById(accountId);
+        Person person = findPersonById(personId);
         account.removePerson(person);
         return accountRepository.save(account);
     }

@@ -1,6 +1,5 @@
 package se.hem.spliteven.controller;
 
-import se.hem.spliteven.domain.BalanceCalculator;
 import se.hem.spliteven.dto.AccountBalanceDto;
 import se.hem.spliteven.dto.AccountDto;
 import se.hem.spliteven.dto.CreatePersonRequest;
@@ -8,18 +7,15 @@ import se.hem.spliteven.dto.PersonDto;
 import se.hem.spliteven.dto.RenameUserRequest;
 import se.hem.spliteven.mapper.DtoMapper;
 import se.hem.spliteven.model.Account;
-import se.hem.spliteven.model.Expense;
 import se.hem.spliteven.model.Person;
 import se.hem.spliteven.service.PersonService;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
 import java.math.BigDecimal;
 import java.time.YearMonth;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,9 +39,10 @@ public class PersonController {
 
     @GetMapping
     public List<PersonDto> getAll() {
-        return personService.getAll()
+        return personService
+                .getAll()
                 .stream()
-                .map(person -> dtoMapper.toDto(person))
+                .map(dtoMapper::toDto)
                 .toList();
     }
 
@@ -57,14 +54,16 @@ public class PersonController {
 
     @GetMapping("/by-email")
     public ResponseEntity<PersonDto> getByEmail(@RequestParam String email) {
-        return personService.findByEmail(email)
+        return personService
+                .findByEmail(email)
                 .map(p -> ResponseEntity.ok(dtoMapper.toDto(p)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/{personId}/accounts")
     public List<AccountDto> getAccountsForPerson(@PathVariable Long personId) {
-        return personService.getAccountsForPerson(personId)
+        return personService
+                .getAccountsForPerson(personId)
                 .stream()
                 .map(account -> dtoMapper.toDto(account))
                 .toList();

@@ -13,12 +13,7 @@ import se.hem.spliteven.service.AccountService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.YearMonth;
 import java.util.List;
-
-import jakarta.websocket.server.PathParam;
 
 @RestController
 @RequestMapping("/api/accounts")
@@ -46,7 +41,11 @@ public class AccountController {
 
     @GetMapping
     public List<AccountDto> getAll() {
-        return accountService.getAll().stream().map(account -> dtoMapper.toDto(account)).toList();
+        return accountService
+                .getAll()
+                .stream()
+                .map(dtoMapper::toDto)
+                .toList();
     }
 
     @PutMapping("/{id}")
