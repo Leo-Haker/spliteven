@@ -2,6 +2,7 @@ package se.hem.spliteven.controller;
 
 import se.hem.spliteven.dto.CreateExpenseRequest;
 import se.hem.spliteven.dto.ExpenseDto;
+import se.hem.spliteven.mapper.DtoMapper;
 import se.hem.spliteven.model.Account;
 import se.hem.spliteven.model.Expense;
 import se.hem.spliteven.model.Person;
@@ -19,13 +20,16 @@ public class ExpenseController {
     private final ExpenseRepository expenseRepository;
     private final AccountRepository accountRepository;
     private final PersonRepository personRepository;
+    private final DtoMapper dtoMapper;
 
     public ExpenseController(ExpenseRepository expenseRepository,
             AccountRepository accountRepository,
-            PersonRepository personRepository) {
+            PersonRepository personRepository,
+            DtoMapper dtoMapper) {
         this.expenseRepository = expenseRepository;
         this.accountRepository = accountRepository;
         this.personRepository = personRepository;
+        this.dtoMapper = dtoMapper;
     }
 
     @PostMapping
@@ -39,16 +43,11 @@ public class ExpenseController {
                 request.description(), request.amount(), request.date());
 
         Expense saved = expenseRepository.save(expense);
-        return toDto(saved);
+        return dtoMapper.toDto(saved);
     }
 
     @GetMapping("/account/{accountId}")
     public List<ExpenseDto> getByAccount(@PathVariable Long accountId) {
-        return expenseRepository.findByAccountId(accountId).stream().map(this::toDto).toList();
-    }
-
-    private ExpenseDto toDto(Expense e) {
-        return new ExpenseDto(e.getId(), e.getDescription(), e.getAmount(),
-                e.isIncome(), e.getPaidBy().getId(), e.getPaidBy().getName(), e.getDate());
+        return expenseRepository.findByAccountId(accountId).stream().map(account -> dtoMapper.toDto(account)).toList();
     }
 }

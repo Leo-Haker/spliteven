@@ -14,6 +14,9 @@ import java.time.YearMonth;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class AccountService {
 
     private final ExpenseRepository expenseRepository;
