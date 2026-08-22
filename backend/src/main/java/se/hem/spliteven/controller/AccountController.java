@@ -1,17 +1,13 @@
 package se.hem.spliteven.controller;
 
-import se.hem.spliteven.domain.BalanceCalculator;
 import se.hem.spliteven.dto.AccountBalanceDto;
 import se.hem.spliteven.dto.AccountDto;
 import se.hem.spliteven.dto.ExpenseDto;
 import se.hem.spliteven.dto.PersonDto;
 import se.hem.spliteven.dto.RenameAccountRequest;
 import se.hem.spliteven.model.Account;
-import se.hem.spliteven.model.Expense;
-import se.hem.spliteven.model.Person;
-import se.hem.spliteven.repository.AccountRepository;
-import se.hem.spliteven.repository.ExpenseRepository;
-import se.hem.spliteven.repository.PersonRepository;
+import se.hem.spliteven.dto.CreateAccountRequest;
+import se.hem.spliteven.service.AccountService;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,47 +23,27 @@ import jakarta.websocket.server.PathParam;
 @RequestMapping("/api/accounts")
 public class AccountController {
 
-    private final ExpenseRepository expenseRepository;
-    private final AccountRepository accountRepository;
-    private final PersonRepository personRepository;
+    private final AccountService accountService;
 
-    public AccountController(AccountRepository accountRepository, PersonRepository personRepository,
-            ExpenseRepository expenseRepository) {
-        this.accountRepository = accountRepository;
-        this.personRepository = personRepository;
-        this.expenseRepository = expenseRepository;
-    }
-
-    public record CreateAccountRequest(String name, Long personId) {
+    public AccountController(AccountService accountService) {
+        this.accountService = accountService;
     }
 
     @PostMapping
     public ResponseEntity<AccountDto> create(@RequestBody CreateAccountRequest request) {
-        Person creator = personRepository.findById(request.personId())
-                .orElseThrow(() -> new IllegalArgumentException("Person hittades inte"));
-
-        Account account = new Account(request.name());
-        account.addPerson(creator);
-
-        Account saved = accountRepository.save(account);
-        return ResponseEntity.ok(toDto(saved));
+        Account account = accountService.create(request.name(), request.personId());
+        return ResponseEntity.ok(toDto(account));
     }
 
     @PostMapping("/{accountId}/members/{personId}")
     public ResponseEntity<AccountDto> addMember(@PathVariable Long accountId, @PathVariable Long personId) {
-        Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new IllegalArgumentException("Konto hittades inte"));
-        Person person = personRepository.findById(personId)
-                .orElseThrow(() -> new IllegalArgumentException("Person hittades inte"));
-
-        account.addPerson(person);
-        Account saved = accountRepository.save(account);
-        return ResponseEntity.ok(toDto(saved));
+        Account account = accountService.addMember(accountId, personId);
+        return ResponseEntity.ok(toDto(account));
     }
 
     @GetMapping
     public List<AccountDto> getAll() {
-        return accountRepository.findAll().stream().map(this::toDto).toList();
+        return accountService.getAll().stream().map(this::toDto).toList();
     }
 
     private AccountDto toDto(Account a) {
@@ -79,28 +55,19 @@ public class AccountController {
 
     @PutMapping("/{id}")
     public ResponseEntity<AccountDto> rename(@PathVariable Long id, @RequestBody RenameAccountRequest request) {
-        Account account = accountRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Konto hittades inte"));
-        account.setName(request.name());
-        Account saved = accountRepository.save(account);
-        return ResponseEntity.ok(toDto(saved));
+        Account account = accountService.rename(id, request.name());
+        return ResponseEntity.ok(toDto(account));
     }
 
     @DeleteMapping("/{accountId}/members/{personId}")
     public ResponseEntity<AccountDto> removeMember(@PathVariable Long accountId, @PathVariable Long personId) {
-        Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new IllegalArgumentException("Konto hittades inte"));
-        Person person = personRepository.findById(personId)
-                .orElseThrow(() -> new IllegalArgumentException("Person hittades inte"));
-
-        account.removePerson(person);
-        Account saved = accountRepository.save(account);
-        return ResponseEntity.ok(toDto(saved));
+        Account account = accountService.removeMember(accountId, personId);
+        return ResponseEntity.ok(toDto(account));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<AccountDto> getOne(@PathVariable Long id) {
-        return accountRepository.findById(id)
+        return accountService.getOne(id)
                 .map(a -> ResponseEntity.ok(toDto(a)))
                 .orElse(ResponseEntity.notFound().build());
     }
