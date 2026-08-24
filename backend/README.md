@@ -1,12 +1,14 @@
 # SplitEven backend
 
-The backend is a Spring Boot REST API. It contains the HTTP controllers, application services, JPA models and repositories, and the balance calculation domain logic.
+The backend is a Spring Boot REST API. It contains the HTTP controllers, application logic implemented through services, DTOs and mappers for API data, JPA entities and repositories, and the balance calculation domain logic.
 
 ## Structure
 
 - `src/main/java/se/hem/spliteven/controller/` - REST endpoints and exception handling
-- `src/main/java/se/hem/spliteven/service/` - application workflows
+- `src/main/java/se/hem/spliteven/service/` - application logic and workflows
 - `src/main/java/se/hem/spliteven/domain/` - balance calculation rules
+- `src/main/java/se/hem/spliteven/dto/` - request and response data transfer objects
+- `src/main/java/se/hem/spliteven/mapper/` - maps between DTOs and domain objects
 - `src/main/java/se/hem/spliteven/model/` - JPA entities
 - `src/main/java/se/hem/spliteven/repository/` - database repositories
 - `src/main/java/se/hem/spliteven/dto/` - request and response objects
