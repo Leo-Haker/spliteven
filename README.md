@@ -46,9 +46,9 @@ JUnit · GitHub Actions
 
 ## Architecture & Workflow
 
-SplitEven is structured as a React frontend communicating with a Spring Boot REST API. The backend follows a Controller–Service–Repository structure and uses JPA/Hibernate to persist Java entities in PostgreSQL.
-
-SplitEven is structured as a React frontend communicating with a Spring Boot REST API. The backend follows a Controller–Service–Repository structure, with application logic implemented through services. DTOs are used for API request and response data, while mappers convert between DTOs and JPA entities. JPA/Hibernate handles persistence of Java entities in PostgreSQL.
+SplitEven is structured as a React frontend communicating with a Spring Boot REST API. The backend follows a Controller–Service–Repository structure, with application logic 
+implemented through services. DTOs define the shape of API requests and responses, and mappers convert between DTOs and JPA entities so persistence details never leak into the 
+API layer. JPA/Hibernate handles persistence of Java entities in PostgreSQL.
 
 Automated tests are written with JUnit and MockMvc and run through GitHub Actions as part of the CI pipeline.
 
