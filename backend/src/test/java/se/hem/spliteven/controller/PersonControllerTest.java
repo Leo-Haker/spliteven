@@ -74,4 +74,16 @@ class PersonControllerTest extends AbstractControllerTest {
         mockMvc.perform(delete("/api/persons/{id}", creatorId))
                 .andExpect(status().isConflict());
     }
+
+    @Test
+    void createPerson_withDuplicateEmail_returnsConflict() throws Exception {
+        createTestPerson("Först", "duplicerad@test.com");
+
+        mockMvc.perform(post("/api/persons")
+                .contentType("application/json")
+                .content("""
+                        {"name":"Sen","email":"duplicerad@test.com","password":"test1234"}
+                        """))
+                .andExpect(status().isConflict());
+    }
 }

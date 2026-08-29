@@ -40,6 +40,9 @@ public class PersonService extends AbstractService {
     }
 
     public Person createPerson(CreatePersonRequest request) {
+        if (personRepository.findByEmail(request.email()).isPresent()) {
+            throw new IllegalStateException("E-postadressen är redan registrerad");
+        }
         String passwordHash = passwordEncoder.encode(request.password());
 
         Person person = new Person(request.name(), request.email(), passwordHash);
