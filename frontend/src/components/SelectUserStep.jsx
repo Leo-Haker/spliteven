@@ -23,10 +23,10 @@ function SelectUserStep() {
     try {
         const savedPerson = await createPerson(name, email, password)
         setCurrentUser(savedPerson)
+        resetVariables()
     } catch (err) {
         setError(err.message)
     }
-    resetVariables()
   }
 
   async function handleLogin(e){

@@ -6,7 +6,10 @@ export async function createPerson(name, email, password) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ name, email, password}),
   })
-  if (!res.ok) throw new Error("Kunde inte skapa användare")
+  if (!res.ok) {
+  const errorBody = await res.json().catch(() => null)
+  throw new Error(errorBody?.message || "Kunde inte skapa användare")
+    }
   return res.json()
 }
 
